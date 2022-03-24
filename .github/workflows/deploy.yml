@@ -1,17 +1,17 @@
 name: Deploy Project
 
-on: 
+on:
   push:
-    branches: 
+    branches:
       - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # uncomment tokens for assignment 2-4
-      # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # auto-generated
+      #uncomment tokens for assignment 2-4
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # auto-generated
       HEROKU_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
@@ -26,8 +26,8 @@ jobs:
         java-version: 1.15
 
     # uncomment for assignment 2-4
-    # - name: test the project and upload test report -> sonarqube
-    # run: ./gradlew test jacocoTestReport sonarqube --info
+    - name: test the project and upload test report -> sonarqube
+    run: ./gradlew test jacocoTestReport sonarqube --info
 
     # https://devcenter.heroku.com/articles/authentication
     - name: create .netrc file for heroku authentication
