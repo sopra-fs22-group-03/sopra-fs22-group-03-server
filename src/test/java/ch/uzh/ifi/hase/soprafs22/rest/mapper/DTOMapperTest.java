@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs22.rest.mapper;
 
-import ch.uzh.ifi.hase.soprafs22.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
@@ -18,14 +17,14 @@ public class DTOMapperTest {
   public void testCreateUser_fromUserPostDTO_toUser_success() {
     // create UserPostDTO
     UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setName("name");
+    userPostDTO.setPassword("password");
     userPostDTO.setUsername("username");
 
     // MAP -> Create user
     User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
     // check content
-    assertEquals(userPostDTO.getName(), user.getName());
+    assertEquals(userPostDTO.getPassword(), user.getPassword());
     assertEquals(userPostDTO.getUsername(), user.getUsername());
   }
 
@@ -33,9 +32,9 @@ public class DTOMapperTest {
   public void testGetUser_fromUser_toUserGetDTO_success() {
     // create User
     User user = new User();
-    user.setName("Firstname Lastname");
+    user.setPassword("password");
     user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
+    user.setLogged_in(true);
     user.setToken("1");
 
     // MAP -> Create UserGetDTO
@@ -43,8 +42,8 @@ public class DTOMapperTest {
 
     // check content
     assertEquals(user.getId(), userGetDTO.getId());
-    assertEquals(user.getName(), userGetDTO.getName());
+    //assertEquals(user.getPassword(), userGetDTO.getPassword()); //we dont return the password in the userGetDTO
     assertEquals(user.getUsername(), userGetDTO.getUsername());
-    assertEquals(user.getStatus(), userGetDTO.getStatus());
+    assertEquals(user.getLogged_in(), userGetDTO.getLogged_in());
   }
 }

@@ -1,9 +1,9 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
-import ch.uzh.ifi.hase.soprafs22.constant.UserStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.*;
 
 /**
  * Internal User Representation
@@ -26,7 +26,7 @@ public class User implements Serializable {
   private Long id;
 
   @Column(nullable = false)
-  private String name;
+  private String password;
 
   @Column(nullable = false, unique = true)
   private String username;
@@ -35,7 +35,13 @@ public class User implements Serializable {
   private String token;
 
   @Column(nullable = false)
-  private UserStatus status;
+  private boolean logged_in;
+
+  @Column(nullable = false)
+  private LocalDate creationDate;
+
+  @Column(nullable = true)
+  private LocalDate birthday;
 
   public Long getId() {
     return id;
@@ -45,12 +51,12 @@ public class User implements Serializable {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getPassword() {
+    return password;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getUsername() {
@@ -69,11 +75,19 @@ public class User implements Serializable {
     this.token = token;
   }
 
-  public UserStatus getStatus() {
-    return status;
+  public boolean getLogged_in() {
+    return logged_in;
   }
 
-  public void setStatus(UserStatus status) {
-    this.status = status;
+  public void setLogged_in(boolean logged_in) {
+    this.logged_in = logged_in;
   }
+
+  public LocalDate getCreationDate() {return creationDate;}
+
+  public void setCreationDate(LocalDate creationDate) { this.creationDate = creationDate; }
+
+  public LocalDate getBirthday() {return birthday;}
+
+  public void setBirthday(LocalDate birthday) {this.birthday = birthday;}
 }
