@@ -5,51 +5,103 @@ import java.time.*;
 
 public class UserGetDTO {
 
-  private Long id;
-//  private String password;
-  private String username;
-  private LocalDate creationDate;
-  private boolean logged_in;
+    private long userId;
+    private String username;
+    private String password;
+    private String street;
+    private long streetNo;
+    private long zipCode;
+    private String city;
+    private long phoneNumber;
+    private String email;
+    private long creditCardNumber;
+    private String licensePlate;
 
-  private LocalDate birthday;
+    public long getUserId() {
+        return userId;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-//  public String getPassword() {
-//    return password;
-//  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-//  public void setPassword(String password) {
-//    this.password = password;
-//  }
+    public String getPassword() {
+        return password;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public String getStreet() {
+        return street;
+    }
 
-  public boolean getLogged_in() {
-    return logged_in;
-  }
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-  public void setLogged_in(boolean logged_in) {
-    this.logged_in = logged_in;
-  }
+    public long getStreetNo() {
+        return streetNo;
+    }
 
-  public LocalDate getCreationDate() {return creationDate;}
+    public void setStreetNo(long streetNo) {
+        this.streetNo = streetNo;
+    }
 
-  public void setCreationDate(LocalDate creationDate) { this.creationDate = creationDate; }
+    public long getZipCode() {
+        return zipCode;
+    }
 
-  public LocalDate getBirthday() {return birthday;}
+    public void setZipCode(long zipCode) {
+        this.zipCode = zipCode;
+    }
 
-  public void setBirthday(LocalDate birthday) { this.birthday = birthday; }
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public long getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
+    public void setCreditCardNumber(long creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
 }
