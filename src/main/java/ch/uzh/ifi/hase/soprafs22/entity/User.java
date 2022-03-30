@@ -19,75 +19,114 @@ import java.time.*;
 @Table(name = "USER")
 public class User implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue
-  private Long id;
+    @Id
+    @GeneratedValue
+    private long userId;
 
-  @Column(nullable = false)
-  private String password;
+    @Column(nullable = false, unique = true)
+    private String username;
 
-  @Column(nullable = false, unique = true)
-  private String username;
+    @Column(nullable = false)
+    private boolean isManager;
 
-  @Column(nullable = false, unique = true)
-  private String token;
+    @Column(nullable = false)
+    private String password;
 
-  @Column(nullable = false)
-  private boolean logged_in;
+    @Column(nullable = false)
+    private String street;
 
-  @Column(nullable = false)
-  private LocalDate creationDate;
+    @Column(nullable = false)
+    private long streetNo;
 
-  @Column(nullable = true)
-  private LocalDate birthday;
+    @Column(nullable = false)
+    private Long zipCode;
 
-  public Long getId() {
-    return id;
-  }
+    @Column(nullable = false)
+    private String city;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    @Column(nullable = false)
+    private String phoneNumber;
 
-  public String getPassword() {
-    return password;
-  }
+    @Column(nullable = false)
+    private String email;
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    @Column(nullable = true)
+    private String licensePlate;
 
-  public String getUsername() {
-    return username;
-  }
+    @Column(nullable = false)
+    private long creditCardNumber;
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    @Column(nullable = false, unique = true)
+    private String token;
 
-  public String getToken() {
-    return token;
-  }
 
-  public void setToken(String token) {
-    this.token = token;
-  }
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
-  public boolean getLogged_in() {
-    return logged_in;
-  }
+    public boolean isManager() {
+        return isManager;
+    }
 
-  public void setLogged_in(boolean logged_in) {
-    this.logged_in = logged_in;
-  }
+    public void setManager(boolean manager) {
+        isManager = manager;
+    }
 
-  public LocalDate getCreationDate() {return creationDate;}
+    public String getStreet() {
+        return street;
+    }
 
-  public void setCreationDate(LocalDate creationDate) { this.creationDate = creationDate; }
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-  public LocalDate getBirthday() {return birthday;}
+    public long getStreetNo() {
+        return streetNo;
+    }
 
-  public void setBirthday(LocalDate birthday) {this.birthday = birthday;}
+    public void setStreetNo(long streetNo) {
+        this.streetNo = streetNo;
+    }
+
+    public Long getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(Long zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
 }
