@@ -42,6 +42,12 @@ public class Parkingslip implements Serializable {
     @Column(nullable = true)
     private String checkoutTime;
 
+    @Column(nullable = false)
+    private String licensePlate;
+
+    @Column(nullable = true)
+    private long parkingFee;
+
     public long getParkingslipId() {
         return parkingslipId;
     }
@@ -96,6 +102,22 @@ public class Parkingslip implements Serializable {
 
     public void setCheckoutTime(String checkoutTime) {
         this.checkoutTime = checkoutTime;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public long getParkingFee() {
+        return parkingFee;
+    }
+
+    public void setParkingFee(long parkingFee) {
+        this.parkingFee = parkingFee;
     }
 
 }

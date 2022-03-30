@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.entity;
 
 
+import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
 
 import javax.persistence.*;
@@ -31,31 +32,13 @@ public class Billing implements Serializable {
     private long userId;
 
     @Column(nullable = false)
-    private String checkinDate;
-
-    @Column(nullable = false)
-    private String checkinTime;
-
-    @Column(nullable = false)
-    private String checkoutDate;
-
-    @Column(nullable = false)
-    private String checkoutTime;
-
-    @Column(nullable = false)
-    private long carparkId;
-
-    @Column(nullable = true)
-    private String licensePlate;
-
-    @Column(nullable = false)
-    private long amount;
-
-    @Column(nullable = false)
-    private long duration;
-
-    @Column(nullable = false)
     private PaymentStatus paymentStatus;
+
+    @Column(nullable = false)
+    private BookingType bookingType;
+
+    @Column(nullable = false)
+    private long bookingId;
 
     @Column(nullable = true)
     private long userIdOfSplitPartner;
@@ -76,76 +59,28 @@ public class Billing implements Serializable {
         this.userId = userId;
     }
 
-    public String getCheckinDate() {
-        return checkinDate;
-    }
-
-    public void setCheckinDate(String checkinDate) {
-        this.checkinDate = checkinDate;
-    }
-
-    public String getCheckinTime() {
-        return checkinTime;
-    }
-
-    public void setCheckinTime(String checkinTime) {
-        this.checkinTime = checkinTime;
-    }
-
-    public String getCheckoutDate() {
-        return checkoutDate;
-    }
-
-    public void setCheckoutDate(String checkoutDate) {
-        this.checkoutDate = checkoutDate;
-    }
-
-    public String getCheckoutTime() {
-        return checkoutTime;
-    }
-
-    public void setCheckoutTime(String checkoutTime) {
-        this.checkoutTime = checkoutTime;
-    }
-
-    public long getCarparkId() {
-        return carparkId;
-    }
-
-    public void setCarparkId(long carparkId) {
-        this.carparkId = carparkId;
-    }
-
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
-
-    public long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
     public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public BookingType getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(BookingType bookingType) {
+        this.bookingType = bookingType;
+    }
+
+    public long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(long bookingId) {
+        this.bookingId = bookingId;
     }
 
     public long getUserIdOfSplitPartner() {
@@ -155,4 +90,6 @@ public class Billing implements Serializable {
     public void setUserIdOfSplitPartner(long userIdOfSplitPartner) {
         this.userIdOfSplitPartner = userIdOfSplitPartner;
     }
+
+
 }
