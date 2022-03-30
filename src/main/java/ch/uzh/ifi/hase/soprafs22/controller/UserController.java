@@ -3,15 +3,11 @@ package ch.uzh.ifi.hase.soprafs22.controller;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserUpdatePutDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User Controller
@@ -103,9 +99,9 @@ public class UserController {
 
     @PutMapping ("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUser(@RequestBody UserUpdatePutDTO userUpdatePutDTO, @PathVariable(value = "userId") Long id) {
+    public void updateUser(@RequestBody UserPutDTO userPutDTO, @PathVariable(value = "userId") Long id) {
         // convert API user updates to internal representation
-        User userUpdateRequest = DTOMapper.INSTANCE.convertUserUpdatePutDTOtoEntity(userUpdatePutDTO);
+        User userUpdateRequest = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
         // get user to be updated from path variable userId
         User userToBeUpdated = userService.getSingleUserById(id);

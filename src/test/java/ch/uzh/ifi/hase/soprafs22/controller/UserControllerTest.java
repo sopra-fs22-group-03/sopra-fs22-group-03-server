@@ -2,7 +2,7 @@ package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserUpdatePutDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -199,8 +199,8 @@ public class UserControllerTest {
         updatedUser.setCreationDate(LocalDate.now());
 
         // some random username update
-        UserUpdatePutDTO userUpdatePutDTO = new UserUpdatePutDTO();
-        userUpdatePutDTO.setUsername("someNewUsername");
+        UserPutDTO userPutDTO = new UserPutDTO();
+        userPutDTO.setUsername("someNewUsername");
 
         // valid userId
         long validUserId = updatedUser.getId();
@@ -212,7 +212,7 @@ public class UserControllerTest {
         // when/then -> do the request + validate the result
         MockHttpServletRequestBuilder putRequest = put("/users/{userId}", validUserId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userUpdatePutDTO));
+                .content(asJsonString(userPutDTO));
 
         // then
         mockMvc.perform(putRequest)
@@ -225,8 +225,8 @@ public class UserControllerTest {
     public void updateUserProfile_invalidUserId_404thrown() throws Exception {
         // given
         // some random username update
-        UserUpdatePutDTO userUpdatePutDTO = new UserUpdatePutDTO();
-        userUpdatePutDTO.setUsername("someNewUsername");
+        UserPutDTO userPutDTO = new UserPutDTO();
+        userPutDTO.setUsername("someNewUsername");
 
         // some random invalid userId
         long invalidUserId = 99;
@@ -242,7 +242,7 @@ public class UserControllerTest {
         // when/then -> do the request + validate the result
         MockHttpServletRequestBuilder putRequest = put("/users/{userId}", invalidUserId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userUpdatePutDTO));
+                .content(asJsonString(userPutDTO));
 
         // then
         mockMvc.perform(putRequest)
