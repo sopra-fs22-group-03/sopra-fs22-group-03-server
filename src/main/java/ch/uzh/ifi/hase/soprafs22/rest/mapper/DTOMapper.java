@@ -1,9 +1,10 @@
 package ch.uzh.ifi.hase.soprafs22.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs22.entity.Billing;
+import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
+import ch.uzh.ifi.hase.soprafs22.entity.Notification;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPutDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -21,21 +22,76 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface DTOMapper {
 
-  DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
+    DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
-  @Mapping(source = "password", target = "password")
-  @Mapping(source = "username", target = "username")
-  User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "password", target = "password")
+    @Mapping(source = "street", target = "street")
+    @Mapping(source = "streetNo", target = "streetNo")
+    @Mapping(source = "zipCode", target = "zipCode")
+    @Mapping(source = "city", target = "city")
+    @Mapping(source = "phoneNumber", target = "phoneNumber")
+    @Mapping(source = "email", target = "email")
+    @Mapping(source = "licensePlate", target = "licensePlate")
+    @Mapping(source = "creditCardNumber", target = "creditCardNumber")
+    User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
 
-  @Mapping(source = "id", target = "id")
-  //@Mapping(source = "password", target = "password")
-  @Mapping(source = "username", target = "username")
-  @Mapping(source = "logged_in", target = "logged_in")
-  @Mapping(source = "creationDate", target = "creationDate")
-  @Mapping(source = "birthday", target = "birthday")
-  UserGetDTO convertEntityToUserGetDTO(User user);
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "isManager", target = "isManager")
+    @Mapping(source = "password", target = "password")
+    @Mapping(source = "street", target = "street")
+    @Mapping(source = "streetNo", target = "streetNo")
+    @Mapping(source = "zipCode", target = "zipCode")
+    @Mapping(source = "city", target = "city")
+    @Mapping(source = "phoneNumber", target = "phoneNumber")
+    @Mapping(source = "email", target = "email")
+    @Mapping(source = "licensePlate", target = "licensePlate")
+    @Mapping(source = "creditCardNumber", target = "creditCardNumber")
+    @Mapping(source = "token", target = "token")
+    UserGetDTO convertEntityToUserGetDTO(User user);
 
-  @Mapping(source = "username", target = "username")
-  @Mapping(source = "birthday", target = "birthday")
-  User convertUserPutDTOtoEntity(UserPutDTO userPutDTO);
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "password", target = "password")
+    @Mapping(source = "street", target = "street")
+    @Mapping(source = "streetNo", target = "streetNo")
+    @Mapping(source = "zipCode", target = "zipCode")
+    @Mapping(source = "city", target = "city")
+    @Mapping(source = "phoneNumber", target = "phoneNumber")
+    @Mapping(source = "email", target = "email")
+    @Mapping(source = "licensePlate", target = "licensePlate")
+    @Mapping(source = "creditCardNumber", target = "creditCardNumber")
+    User convertUserPutDTOtoEntity(UserPutDTO userPutDTO);
+
+    @Mapping(source = "billingId", target = "billingId")
+    @Mapping(source = "bookingType", target = "bookingType")
+    @Mapping(source = "bookingId", target = "bookingId")
+    @Mapping(source = "paymentStatus", target = "paymentStatus")
+    BillingGetDTO convertEntityToBillingGetDTO(Billing billing);
+
+    @Mapping(source = "carparkId", target = "carparkId")
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "maxCapacity", target = "maxCapacity")
+    @Mapping(source = "numOfEmptySpaces", target = "numOfEmptySpaces")
+    @Mapping(source = "street", target = "street")
+    @Mapping(source = "streetNo", target = "streetNo")
+    @Mapping(source = "zipCode", target = "zipCode")
+    @Mapping(source = "city", target = "city")
+    @Mapping(source = "longitude", target = "longitude")
+    @Mapping(source = "latitude", target = "latitude")
+    @Mapping(source = "weekdayOpenFrom", target = "weekdayOpenFrom")
+    @Mapping(source = "weekdayOpenTo", target = "weekdayOpenTo")
+    @Mapping(source = "weekendOpenFrom", target = "weekendOpenFrom")
+    @Mapping(source = "weekendOpenTo", target = "weekendOpenTo")
+    @Mapping(source = "hourlyTariff", target = "hourlyTariff")
+    @Mapping(source = "remarks", target = "remarks")
+    CarparkGetDTO convertEntityToCarparkGetDTO(Carpark carpark);
+
+    @Mapping(source = "notificationId", target = "notificationId")
+    @Mapping(source = "requesterId", target = "requesterId")
+    @Mapping(source = "requestedId", target = "requestedId")
+    @Mapping(source = "billingId", target = "billingId")
+    @Mapping(source = "response", target = "response")
+    NotificationGetDTO convertEntityToNotificationGetDTO(Notification notification);
+
 }
