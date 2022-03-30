@@ -8,7 +8,7 @@ public class UserPostDTO {
     private long streetNo;
     private long zipCode;
     private String city;
-    private long phoneNumber;
+    private String phoneNumber;
     private String email;
     private long creditCardNumber;
     private String licensePlate;
@@ -61,11 +61,11 @@ public class UserPostDTO {
         this.city = city;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

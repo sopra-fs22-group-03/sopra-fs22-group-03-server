@@ -12,10 +12,12 @@ public class UserGetDTO {
     private long streetNo;
     private long zipCode;
     private String city;
-    private long phoneNumber;
+    private String phoneNumber;
     private String email;
     private long creditCardNumber;
     private String licensePlate;
+    private boolean isManager;
+    private String token;
 
     public long getUserId() {
         return userId;
@@ -73,11 +75,11 @@ public class UserGetDTO {
         this.city = city;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -103,5 +105,21 @@ public class UserGetDTO {
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
+    }
+
+    public boolean isManager() {
+        return isManager;
+    }
+
+    public void setManager(boolean manager) {
+        isManager = manager;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

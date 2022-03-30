@@ -9,6 +9,8 @@ public class ParkingslipGetDTO {
     private String checkinTime;
     private String checkoutDate;
     private String checkoutTime;
+    private String licensePlate;
+    private long parkingFee;
 
     public long getParkingslipId() {
         return parkingslipId;
@@ -64,5 +66,21 @@ public class ParkingslipGetDTO {
 
     public void setCheckoutTime(String checkoutTime) {
         this.checkoutTime = checkoutTime;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public long getParkingFee() {
+        return parkingFee;
+    }
+
+    public void setParkingFee(long parkingFee) {
+        this.parkingFee = parkingFee;
     }
 }

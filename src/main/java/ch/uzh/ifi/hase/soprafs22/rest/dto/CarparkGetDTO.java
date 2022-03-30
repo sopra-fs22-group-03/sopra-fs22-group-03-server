@@ -5,7 +5,7 @@ public class CarparkGetDTO {
     private long carparkId;
     private String name;
     private long maxCapacity;
-    private long occupiedCapacity;
+    private long numOfEmptySpaces;
     private String street;
     private long streetNo;
     private long zipCode;
@@ -43,12 +43,12 @@ public class CarparkGetDTO {
         this.maxCapacity = maxCapacity;
     }
 
-    public long getOccupiedCapacity() {
-        return occupiedCapacity;
+    public long getNumOfEmptySpaces() {
+        return numOfEmptySpaces;
     }
 
-    public void setOccupiedCapacity(long occupiedCapacity) {
-        this.occupiedCapacity = occupiedCapacity;
+    public void setNumOfEmptySpaces(long numOfEmptySpaces) {
+        this.numOfEmptySpaces = numOfEmptySpaces;
     }
 
     public String getStreet() {
