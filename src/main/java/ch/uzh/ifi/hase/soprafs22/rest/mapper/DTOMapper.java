@@ -1,9 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.rest.mapper;
 
-import ch.uzh.ifi.hase.soprafs22.entity.Billing;
-import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
-import ch.uzh.ifi.hase.soprafs22.entity.Notification;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -93,5 +90,46 @@ public interface DTOMapper {
     @Mapping(source = "billingId", target = "billingId")
     @Mapping(source = "response", target = "response")
     NotificationGetDTO convertEntityToNotificationGetDTO(Notification notification);
+
+
+    @Mapping(source = "parkingslipId", target = "parkingslipId")
+    @Mapping(source = "carparkId", target = "carparkId")
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "checkinDate", target = "checkinDate")
+    @Mapping(source = "checkinTime", target = "checkinTime")
+    @Mapping(source = "checkoutDate", target = "checkoutDate")
+    @Mapping(source = "checkoutTime", target = "checkoutTime")
+    @Mapping(source = "licensePlate", target = "licensePlate")
+    @Mapping(source = "parkingFee", target = "parkingFee")
+    ParkingslipGetDTO convertEntityToParkingslipGetDTO(Parkingslip parkingslip);
+
+
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "carparkId", target = "carparkId")
+    @Mapping(source = "checkinDate", target = "checkinDate")
+    @Mapping(source = "checkinTime", target = "checkinTime")
+    @Mapping(source = "checkoutDate", target = "checkoutDate")
+    @Mapping(source = "checkoutTime", target = "checkoutTime")
+    Reservation convertReservationPostDTOtoEntity(ReservationPostDTO reservationPostDTO);
+
+
+    @Mapping(source = "reservationId", target = "reservationId")
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "carparkId", target = "carparkId")
+    @Mapping(source = "checkinDate", target = "checkinDate")
+    @Mapping(source = "checkinTime", target = "checkinTime")
+    @Mapping(source = "checkoutDate", target = "checkoutDate")
+    @Mapping(source = "checkoutTime", target = "checkoutTime")
+    @Mapping(source = "licensePlate", target = "licensePlate")
+    @Mapping(source = "parkingFee", target = "parkingFee")
+    ReservationGetDTO convertEntityToReservationGetDTO(Reservation reservation);
+
+
+    @Mapping(source = "reservationId", target = "reservationId")
+    @Mapping(source = "checkinDate", target = "checkinDate")
+    @Mapping(source = "checkinTime", target = "checkinTime")
+    @Mapping(source = "checkoutDate", target = "checkoutDate")
+    @Mapping(source = "checkoutTime", target = "checkoutTime")
+    Reservation convertReservationPutDTOtoEntity(ReservationPutDTO reservationPutDTO);
 
 }

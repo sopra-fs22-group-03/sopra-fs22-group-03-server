@@ -1,8 +1,5 @@
 package ch.uzh.ifi.hase.soprafs22.rest.dto;
 
-
-import java.time.*;
-
 public class UserGetDTO {
 
     private long userId;

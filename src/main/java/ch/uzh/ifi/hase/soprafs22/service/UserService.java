@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.time.*;
 
 /**
  * User Service
@@ -48,6 +48,17 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, id));
         }
         return userById;
+    }
+
+    public User getSingleUserByName(String username) {
+        User userByName = userRepository.findByUsername(username);
+
+        // throw error if user does not exist
+        if (userByName == null) {
+            String baseErrorMessage = "The user with username %s was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, username));
+        }
+        return userByName;
     }
 
     public User createUser(User newUser) {
@@ -131,6 +142,20 @@ public class UserService {
      * @throws ResponseStatusException
      * @see User
      */
+//  private void checkIfUserExists(User userToBeCreated) {
+//    User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
+//    // User userByName = userRepository.findByName(userToBeCreated.getName());
+//
+//    String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
+//    if (userByUsername != null && userByName != null) {
+//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+//          String.format(baseErrorMessage, "username and the name", "are"));
+//    } else if (userByUsername != null) {
+//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
+//    } else if (userByName != null) {
+//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
+//    }
+//  }
     private void checkIfUserExists(User userToBeCreated) {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
