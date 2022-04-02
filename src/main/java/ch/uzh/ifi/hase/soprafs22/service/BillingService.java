@@ -42,7 +42,7 @@ public class BillingService {
     }
 
     public Billing getSingleBillingByBillingId(long billingId) {
-        Billing billingByBillingId = billingRepository.findByBillingId(billingId);
+        Billing billingByBillingId = billingRepository.findById(billingId);
 
         // throw error if carpark does not exist
         if (billingByBillingId == null) {

@@ -26,7 +26,7 @@ public class Billing implements Serializable {
 
     @Id
     @GeneratedValue
-    private long billingId;
+    private long id;
 
     @Column(nullable = false)
     private long userId;
@@ -43,12 +43,12 @@ public class Billing implements Serializable {
     @Column(nullable = true)
     private long userIdOfSplitPartner;
 
-    public long getBillingId() {
-        return billingId;
+    public long getId() {
+        return id;
     }
 
-    public void setBillingId(long billingId) {
-        this.billingId = billingId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getUserId() {

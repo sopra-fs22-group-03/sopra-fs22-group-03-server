@@ -41,7 +41,7 @@ public class ReservationService {
     }
 
     public Reservation getSingleReservationByReservationId(long reservationId) {
-        Reservation reservationByReservationId = reservationRepository.findByReservationId(reservationId);
+        Reservation reservationByReservationId = reservationRepository.findById(reservationId);
 
         // throw error if carpark does not exist
         if (reservationByReservationId == null) {

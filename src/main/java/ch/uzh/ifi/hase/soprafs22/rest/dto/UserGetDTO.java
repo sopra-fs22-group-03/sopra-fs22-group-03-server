@@ -15,6 +15,7 @@ public class UserGetDTO {
     private String licensePlate;
     private boolean isManager;
     private String token;
+    private boolean isLoggedIn;
 
     public long getUserId() {
         return userId;
@@ -104,19 +105,27 @@ public class UserGetDTO {
         this.licensePlate = licensePlate;
     }
 
-    public boolean getIsManager() {
-        return isManager;
-    }
-
-    public void setIsManager(boolean isManager) {
-        this.isManager = isManager;
-    }
-
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setIsLoggedIn(boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+    }
+
+    public boolean getIsManager() {
+        return isManager;
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
     }
 }

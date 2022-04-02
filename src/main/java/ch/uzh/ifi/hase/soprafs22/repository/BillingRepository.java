@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository("billingRepository")
 public interface BillingRepository extends JpaRepository<Billing, Long> {
-    Billing findByBillingId(long billingId);
+    Billing findById(long billingId);
 
     List<Billing> findAllByUserId(long userId);
 

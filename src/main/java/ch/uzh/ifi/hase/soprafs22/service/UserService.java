@@ -63,7 +63,8 @@ public class UserService {
 
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
-//        newUser.setLogged_in(true);
+        newUser.setIsManager(false);
+        newUser.setIsLoggedIn(true);
 //        newUser.setCreationDate(LocalDate.now());
 
         checkIfUserExists(newUser);
@@ -88,7 +89,7 @@ public class UserService {
         }
 
         userByUsername.setToken(UUID.randomUUID().toString());
-//        userByUsername.setLogged_in(true);
+        userByUsername.setIsLoggedIn(true);
         userByUsername = userRepository.save(userByUsername);
         userRepository.flush();
 
@@ -98,13 +99,13 @@ public class UserService {
     public User logoutUser(User existingUser, Long id) {
 
         // check if user is already logged out
-//        if (!existingUser.getLogged_in()) {
-//            String baseErrorMessage = "The user with id %d is already logged out";
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, id));
-//        }
+        if (!existingUser.getIsLoggedIn()) {
+            String baseErrorMessage = "The user with id %d is already logged out";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, id));
+        }
 
         // logout user
-//        existingUser.setLogged_in(false);
+        existingUser.setIsLoggedIn(false);
         existingUser = userRepository.save(existingUser);
         userRepository.flush();
 

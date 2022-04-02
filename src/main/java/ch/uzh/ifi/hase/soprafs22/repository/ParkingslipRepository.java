@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("parkingslipRepository")
 public interface ParkingslipRepository extends JpaRepository<Parkingslip, Long> {
-    Parkingslip findByParkingslipId(long id);
+    Parkingslip findById(long id);
 }

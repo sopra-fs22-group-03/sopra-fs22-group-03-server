@@ -24,7 +24,7 @@ public class Notification implements Serializable {
 
     @Id
     @GeneratedValue
-    private long notificationId;
+    private long id;
 
     @Column(nullable = false)
     private long requesterId;
@@ -38,12 +38,12 @@ public class Notification implements Serializable {
     @Column(nullable = false)
     private SplitRequestStatus response;
 
-    public long getNotificationId() {
-        return notificationId;
+    public long getId() {
+        return id;
     }
 
-    public void setNotificationId(long notificationId) {
-        this.notificationId = notificationId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getRequesterId() {

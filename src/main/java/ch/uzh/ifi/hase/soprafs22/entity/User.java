@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs22.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.*;
 
 /**
  * Internal User Representation
@@ -23,7 +22,7 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue
-    private long userId;
+    private long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -61,12 +60,15 @@ public class User implements Serializable {
     @Column(nullable = false, unique = true)
     private String token;
 
-    public long getUserId() {
-        return userId;
+    @Column(nullable =false)
+    private boolean isLoggedIn;
+
+    public long getId() {
+        return id;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -75,14 +77,6 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public boolean getIsManager() {
-        return isManager;
-    }
-
-    public void setIsManager(boolean isManager) {
-        this.isManager = isManager;
     }
 
     public String getPassword() {
@@ -163,5 +157,21 @@ public class User implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setIsLoggedIn(boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+    }
+
+    public boolean getIsManager() {
+        return isManager;
+    }
+
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
     }
 }

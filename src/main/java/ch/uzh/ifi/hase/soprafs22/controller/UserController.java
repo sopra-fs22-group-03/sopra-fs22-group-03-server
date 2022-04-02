@@ -68,7 +68,7 @@ public class UserController {
       return DTOMapper.INSTANCE.convertEntityToUserGetDTO(loggedInUser);
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/users/{userId}/profile")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public UserGetDTO getProfileInformation(@PathVariable(value = "userId") Long id) {

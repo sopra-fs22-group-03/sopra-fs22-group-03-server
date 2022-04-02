@@ -22,7 +22,7 @@ public class Reservation implements Serializable {
 
     @Id
     @GeneratedValue
-    private long reservationId;
+    private long id;
 
     @Column(nullable = false)
     private long userId;
@@ -48,12 +48,12 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private long parkingFee;
 
-    public long getReservationId() {
-        return reservationId;
+    public long getId() {
+        return id;
     }
 
-    public void setReservationId(long reservationId) {
-        this.reservationId = reservationId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getUserId() {

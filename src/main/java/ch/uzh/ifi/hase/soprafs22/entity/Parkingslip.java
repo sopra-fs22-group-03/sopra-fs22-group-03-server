@@ -22,7 +22,7 @@ public class Parkingslip implements Serializable {
 
     @Id
     @GeneratedValue
-    private long parkingslipId;
+    private long id;
 
     @Column(nullable = false)
     private long carparkId;
@@ -48,12 +48,12 @@ public class Parkingslip implements Serializable {
     @Column(nullable = true)
     private long parkingFee;
 
-    public long getParkingslipId() {
-        return parkingslipId;
+    public long getId() {
+        return id;
     }
 
-    public void setParkingslipId(long parkingslipId) {
-        this.parkingslipId = parkingslipId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getCarparkId() {

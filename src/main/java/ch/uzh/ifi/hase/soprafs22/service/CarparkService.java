@@ -40,7 +40,7 @@ public class CarparkService {
     }
 
     public Carpark getSingleCarparkById(long id) {
-        Carpark carparkById = carparkRepository.findByCarparkId(id);
+        Carpark carparkById = carparkRepository.findById(id);
 
         // throw error if carpark does not exist
         if (carparkById == null) {

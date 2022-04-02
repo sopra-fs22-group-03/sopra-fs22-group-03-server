@@ -33,7 +33,7 @@ public interface DTOMapper {
     @Mapping(source = "creditCardNumber", target = "creditCardNumber")
     User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
 
-    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "id", target = "userId")
     @Mapping(source = "username", target = "username")
     @Mapping(source = "isManager", target = "isManager")
     @Mapping(source = "password", target = "password")
@@ -46,6 +46,7 @@ public interface DTOMapper {
     @Mapping(source = "licensePlate", target = "licensePlate")
     @Mapping(source = "creditCardNumber", target = "creditCardNumber")
     @Mapping(source = "token", target = "token")
+    @Mapping(source = "isLoggedIn", target = "isLoggedIn")
     UserGetDTO convertEntityToUserGetDTO(User user);
 
     @Mapping(source = "username", target = "username")
@@ -60,13 +61,13 @@ public interface DTOMapper {
     @Mapping(source = "creditCardNumber", target = "creditCardNumber")
     User convertUserPutDTOtoEntity(UserPutDTO userPutDTO);
 
-    @Mapping(source = "billingId", target = "billingId")
+    @Mapping(source = "id", target = "billingId")
     @Mapping(source = "bookingType", target = "bookingType")
     @Mapping(source = "bookingId", target = "bookingId")
     @Mapping(source = "paymentStatus", target = "paymentStatus")
     BillingGetDTO convertEntityToBillingGetDTO(Billing billing);
 
-    @Mapping(source = "carparkId", target = "carparkId")
+    @Mapping(source = "id", target = "carparkId")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "maxCapacity", target = "maxCapacity")
     @Mapping(source = "numOfEmptySpaces", target = "numOfEmptySpaces")
@@ -84,7 +85,7 @@ public interface DTOMapper {
     @Mapping(source = "remarks", target = "remarks")
     CarparkGetDTO convertEntityToCarparkGetDTO(Carpark carpark);
 
-    @Mapping(source = "notificationId", target = "notificationId")
+    @Mapping(source = "id", target = "notificationId")
     @Mapping(source = "requesterId", target = "requesterId")
     @Mapping(source = "requestedId", target = "requestedId")
     @Mapping(source = "billingId", target = "billingId")
@@ -92,7 +93,7 @@ public interface DTOMapper {
     NotificationGetDTO convertEntityToNotificationGetDTO(Notification notification);
 
 
-    @Mapping(source = "parkingslipId", target = "parkingslipId")
+    @Mapping(source = "id", target = "parkingslipId")
     @Mapping(source = "carparkId", target = "carparkId")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "checkinDate", target = "checkinDate")
@@ -113,7 +114,7 @@ public interface DTOMapper {
     Reservation convertReservationPostDTOtoEntity(ReservationPostDTO reservationPostDTO);
 
 
-    @Mapping(source = "reservationId", target = "reservationId")
+    @Mapping(source = "id", target = "reservationId")
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "carparkId", target = "carparkId")
     @Mapping(source = "checkinDate", target = "checkinDate")
@@ -125,7 +126,7 @@ public interface DTOMapper {
     ReservationGetDTO convertEntityToReservationGetDTO(Reservation reservation);
 
 
-    @Mapping(source = "reservationId", target = "reservationId")
+    @Mapping(source = "reservationId", target = "id")
     @Mapping(source = "checkinDate", target = "checkinDate")
     @Mapping(source = "checkinTime", target = "checkinTime")
     @Mapping(source = "checkoutDate", target = "checkoutDate")

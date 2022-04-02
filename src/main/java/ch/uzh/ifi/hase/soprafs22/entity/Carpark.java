@@ -22,7 +22,7 @@ public class Carpark implements Serializable{
 
     @Id
     @GeneratedValue
-    private long carparkId;
+    private long id;
 
     @Column(nullable = false)
     private String name;
@@ -72,12 +72,12 @@ public class Carpark implements Serializable{
     @Column(nullable = true)
     private String remarks;
 
-    public long getCarparkId() {
-        return carparkId;
+    public long getId() {
+        return id;
     }
 
-    public void setCarparkId(long carparkId) {
-        this.carparkId = carparkId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
