@@ -77,12 +77,12 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public boolean isManager() {
+    public boolean getIsManager() {
         return isManager;
     }
 
-    public void setManager(boolean manager) {
-        isManager = manager;
+    public void setIsManager(boolean isManager) {
+        this.isManager = isManager;
     }
 
     public String getPassword() {

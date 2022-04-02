@@ -63,8 +63,8 @@ public class UserService {
 
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
-        newUser.setLogged_in(true);
-        newUser.setCreationDate(LocalDate.now());
+//        newUser.setLogged_in(true);
+//        newUser.setCreationDate(LocalDate.now());
 
         checkIfUserExists(newUser);
 
@@ -88,7 +88,7 @@ public class UserService {
         }
 
         userByUsername.setToken(UUID.randomUUID().toString());
-        userByUsername.setLogged_in(true);
+//        userByUsername.setLogged_in(true);
         userByUsername = userRepository.save(userByUsername);
         userRepository.flush();
 
@@ -98,13 +98,13 @@ public class UserService {
     public User logoutUser(User existingUser, Long id) {
 
         // check if user is already logged out
-        if (!existingUser.getLogged_in()) {
-            String baseErrorMessage = "The user with id %d is already logged out";
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, id));
-        }
+//        if (!existingUser.getLogged_in()) {
+//            String baseErrorMessage = "The user with id %d is already logged out";
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, id));
+//        }
 
         // logout user
-        existingUser.setLogged_in(false);
+//        existingUser.setLogged_in(false);
         existingUser = userRepository.save(existingUser);
         userRepository.flush();
 
@@ -114,9 +114,9 @@ public class UserService {
     public User updateUser(User userToBeUpdated, User userUpdateRequest) {
 
         // update birthday if provided birthday is not null
-        if (userUpdateRequest.getBirthday() != null) {
-            userToBeUpdated.setBirthday(userUpdateRequest.getBirthday());
-        }
+//        if (userUpdateRequest.getBirthday() != null) {
+//            userToBeUpdated.setBirthday(userUpdateRequest.getBirthday());
+//        }
 
         // update username if provided username is not null
         if (userUpdateRequest.getUsername() != null) {
