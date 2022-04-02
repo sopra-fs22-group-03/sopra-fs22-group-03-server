@@ -10,13 +10,13 @@ public class CarparkGetDTO {
     private long streetNo;
     private long zipCode;
     private String city;
-    private long longitude;
-    private long latitude;
+    private double longitude;
+    private double latitude;
     private String weekdayOpenFrom;
     private String weekdayOpenTo;
     private String weekendOpenFrom;
     private String weekendOpenTo;
-    private Long hourlyTariff;
+    private long hourlyTariff;
     private String remarks;
 
     public long getCarparkId() {
@@ -83,19 +83,19 @@ public class CarparkGetDTO {
         this.city = city;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
@@ -131,11 +131,11 @@ public class CarparkGetDTO {
         this.weekendOpenTo = weekendOpenTo;
     }
 
-    public Long getHourlyTariff() {
+    public long getHourlyTariff() {
         return hourlyTariff;
     }
 
-    public void setHourlyTariff(Long hourlyTariff) {
+    public void setHourlyTariff(long hourlyTariff) {
         this.hourlyTariff = hourlyTariff;
     }
 

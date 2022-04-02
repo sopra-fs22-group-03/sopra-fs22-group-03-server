@@ -46,10 +46,10 @@ public class Carpark implements Serializable{
     private String city;
 
     @Column(nullable = false)
-    private long longitude;
+    private double longitude;
 
     @Column(nullable = false)
-    private long latitude;
+    private double latitude;
 
     @Column(nullable = false)
     private boolean open;
@@ -67,7 +67,7 @@ public class Carpark implements Serializable{
     private String weekendOpenTo;
 
     @Column(nullable = false)
-    private Long hourlyTariff;
+    private long hourlyTariff;
 
     @Column(nullable = true)
     private String remarks;
@@ -136,19 +136,19 @@ public class Carpark implements Serializable{
         this.city = city;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
@@ -192,11 +192,11 @@ public class Carpark implements Serializable{
         this.weekendOpenTo = weekendOpenTo;
     }
 
-    public Long getHourlyTariff() {
+    public long getHourlyTariff() {
         return hourlyTariff;
     }
 
-    public void setHourlyTariff(Long hourlyTariff) {
+    public void setHourlyTariff(long hourlyTariff) {
         this.hourlyTariff = hourlyTariff;
     }
 
