@@ -37,7 +37,7 @@ public class User implements Serializable {
     private String street;
 
     @Column(nullable = false)
-    private long streetNo;
+    private String streetNo;
 
     @Column(nullable = false)
     private Long zipCode;
@@ -95,11 +95,11 @@ public class User implements Serializable {
         this.street = street;
     }
 
-    public long getStreetNo() {
+    public String getStreetNo() {
         return streetNo;
     }
 
-    public void setStreetNo(long streetNo) {
+    public void setStreetNo(String streetNo) {
         this.streetNo = streetNo;
     }
 

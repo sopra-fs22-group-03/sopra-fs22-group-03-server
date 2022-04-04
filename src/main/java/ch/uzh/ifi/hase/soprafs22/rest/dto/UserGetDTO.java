@@ -6,7 +6,7 @@ public class UserGetDTO {
     private String username;
     private String password;
     private String street;
-    private long streetNo;
+    private String streetNo;
     private long zipCode;
     private String city;
     private String phoneNumber;
@@ -49,11 +49,11 @@ public class UserGetDTO {
         this.street = street;
     }
 
-    public long getStreetNo() {
+    public String getStreetNo() {
         return streetNo;
     }
 
-    public void setStreetNo(long streetNo) {
+    public void setStreetNo(String streetNo) {
         this.streetNo = streetNo;
     }
 

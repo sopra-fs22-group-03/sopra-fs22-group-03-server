@@ -44,7 +44,7 @@ public class CarparkService {
         carpark1.setMaxCapacity(100);
         carpark1.setNumOfEmptySpaces(5);
         carpark1.setStreet("Mustertrasse");
-        carpark1.setStreetNo(12);
+        carpark1.setStreetNo("12");
         carpark1.setZipCode(8000);
         carpark1.setCity("Zürich");
         carpark1.setLongitude(8.545094);
@@ -60,7 +60,7 @@ public class CarparkService {
         carpark2.setMaxCapacity(30);
         carpark2.setNumOfEmptySpaces(5);
         carpark2.setStreet("Musterweg");
-        carpark2.setStreetNo(15);
+        carpark2.setStreetNo("15a");
         carpark2.setZipCode(8000);
         carpark2.setCity("Zürich");
         carpark2.setLongitude(8.6);

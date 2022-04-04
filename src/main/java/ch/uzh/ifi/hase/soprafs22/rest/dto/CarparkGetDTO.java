@@ -7,7 +7,7 @@ public class CarparkGetDTO {
     private long maxCapacity;
     private long numOfEmptySpaces;
     private String street;
-    private long streetNo;
+    private String streetNo;
     private long zipCode;
     private String city;
     private double longitude;
@@ -59,11 +59,11 @@ public class CarparkGetDTO {
         this.street = street;
     }
 
-    public long getStreetNo() {
+    public String getStreetNo() {
         return streetNo;
     }
 
-    public void setStreetNo(long streetNo) {
+    public void setStreetNo(String streetNo) {
         this.streetNo = streetNo;
     }
 
