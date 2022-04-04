@@ -36,8 +36,8 @@ public class Carpark implements Serializable{
     @Column(nullable = false)
     private String street;
 
-    @Column(nullable = false)
-    private long streetNo;
+    @Column(nullable = true)
+    private String streetNo;
 
     @Column(nullable = false)
     private long zipCode;
@@ -71,6 +71,9 @@ public class Carpark implements Serializable{
 
     @Column(nullable = true)
     private String remarks;
+
+    @Column(nullable = true)
+    private String link;
 
     public long getId() {
         return id;
@@ -112,11 +115,11 @@ public class Carpark implements Serializable{
         this.street = street;
     }
 
-    public long getStreetNo() {
+    public String getStreetNo() {
         return streetNo;
     }
 
-    public void setStreetNo(long streetNo) {
+    public void setStreetNo(String streetNo) {
         this.streetNo = streetNo;
     }
 
