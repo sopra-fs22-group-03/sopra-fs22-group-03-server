@@ -72,7 +72,7 @@ public class Carpark implements Serializable{
     @Column(nullable = true)
     private String remarks;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String link;
 
     public long getId() {

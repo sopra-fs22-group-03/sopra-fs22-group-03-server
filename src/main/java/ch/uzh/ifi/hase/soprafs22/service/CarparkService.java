@@ -4,6 +4,9 @@ import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
 import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.CarparkRepository;
+import ch.uzh.ifi.hase.soprafs22.rss.Feed;
+import ch.uzh.ifi.hase.soprafs22.rss.FeedMessage;
+import ch.uzh.ifi.hase.soprafs22.rss.RSSFeedParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,54 +36,13 @@ public class CarparkService {
     @Autowired
     public CarparkService(@Qualifier("carparkRepository") CarparkRepository carparkRepository) {
         this.carparkRepository = carparkRepository;
-        /**
-         * Generate some records in Carpark database - to be deleted after persistent database exists
-         * DELETE FROM HERE
-         */
-        Carpark carpark1 = new Carpark();
-        Carpark carpark2 = new Carpark();
-
-        carpark1.setName("carpark1");
-        carpark1.setMaxCapacity(100);
-        carpark1.setNumOfEmptySpaces(5);
-        carpark1.setStreet("Mustertrasse");
-        carpark1.setStreetNo("12");
-        carpark1.setZipCode(8000);
-        carpark1.setCity("Zürich");
-        carpark1.setLongitude(8.545094);
-        carpark1.setLatitude(47.373878);
-        carpark1.setOpen(true);
-        carpark1.setWeekdayOpenFrom("08:00");
-        carpark1.setWeekdayOpenTo("22:00");
-        carpark1.setWeekendOpenFrom("08:00");
-        carpark1.setWeekendOpenTo("20:00");
-        carpark1.setHourlyTariff(9);
-
-        carpark2.setName("carpark2");
-        carpark2.setMaxCapacity(30);
-        carpark2.setNumOfEmptySpaces(5);
-        carpark2.setStreet("Musterweg");
-        carpark2.setStreetNo("15a");
-        carpark2.setZipCode(8000);
-        carpark2.setCity("Zürich");
-        carpark2.setLongitude(8.6);
-        carpark2.setLatitude(47.1);
-        carpark2.setOpen(true);
-        carpark2.setWeekdayOpenFrom("08:00");
-        carpark2.setWeekdayOpenTo("22:00");
-        carpark2.setWeekendOpenFrom("08:00");
-        carpark2.setWeekendOpenTo("20:00");
-        carpark2.setHourlyTariff(9);
-
-        carpark1 = carparkRepository.save(carpark1);
-        carpark2 = carparkRepository.save(carpark2);
-        carparkRepository.flush();
-        /**
-         * DELETE UNTIL HERE
-         */
     }
 
     public List<Carpark> getCarparks() {
+
+        // get current number of empty parking spaces from RSSFeed
+        updateRSSFeed();
+
         return this.carparkRepository.findAll();
     }
 
@@ -92,6 +54,10 @@ public class CarparkService {
             String baseErrorMessage = "The carpark with id %d was not found";
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, id));
         }
+
+        // get current number of empty parking spaces from RSSFeed
+        updateRSSFeed();
+
         return carparkById;
     }
 
@@ -109,4 +75,36 @@ public class CarparkService {
         return parkingslipCheckout;
     }
 
+    private void updateRSSFeed() {
+        RSSFeedParser parser = new RSSFeedParser("https://www.pls-zh.ch/plsFeed/rss/");
+        Feed feed = parser.readFeed();
+
+        // updates capacity in all carparks from RSS-feed
+        for (FeedMessage item : feed.getMessages()) {
+            Carpark carparkByLink = carparkRepository.findCarparkByLink(item.getLink());
+
+            // the description contains the status (open/closed) and the number of empty parking lots
+            // here, we will, thus, extract both substrings (status, number of emtpy parking lots)
+            String description = item.getDescription();
+            String status = description.substring(0, description.indexOf("/") - 1);
+            String emptySpacesString = description.substring(description.indexOf("/") + 1, description.length()).trim();
+
+            int emptySpaces;
+            try {
+                emptySpaces = Integer.parseInt(emptySpacesString);
+            }
+            catch (Exception e) { // the number of empty spaces is set to zero if it cannot be parsed
+                emptySpaces = 0;
+            }
+
+            if (status.equals("open")) {
+                carparkByLink.setOpen(true);
+                carparkByLink.setNumOfEmptySpaces(emptySpaces);
+            }
+            else {
+                carparkByLink.setOpen(false);
+                carparkByLink.setNumOfEmptySpaces(0);
+            }
+        }
+    }
 }

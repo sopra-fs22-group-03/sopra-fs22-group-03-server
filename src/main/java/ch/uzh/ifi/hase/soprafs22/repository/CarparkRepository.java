@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository("carparkRepository")
 public interface CarparkRepository extends JpaRepository<Carpark, Long> {
     Carpark findById(long id);
+
+    Carpark findCarparkByLink(String link);
 }
