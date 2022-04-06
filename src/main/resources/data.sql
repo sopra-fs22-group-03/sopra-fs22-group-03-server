@@ -19,7 +19,7 @@ INSERT INTO CARPARK (ID, NAME, MAX_CAPACITY, NUM_OF_EMPTY_SPACES, STREET, STREET
     (100017,'Messe Zuerich AG',2000,0,'Andreasstrasse','65',8050, 'Zurich',47.4138869,8.5534, TRUE,'06:00:00', '23:59:59', '00:00:00', '23:59:59',3.5, 'Height limit 2.10 m.  Permanent rental on demand','https://www.pls-zh.ch/parkhaus/messe.jsp?pid=messe'),
     (100018,'Nordhaus',175,0,'Siewerdtstrasse','8',8050, 'Zurich',47.4120604,8.5475259, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',3, 'Height limit 2.00 m.  Permanent rental on demand','https://www.pls-zh.ch/parkhaus/nordhaus.jsp?pid=nordhaus'),
     (100019,'Octavo',123,0,'Brown-Boveri-Strasse','2',8050, 'Zurich',47.4136261,8.5364809, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',3, 'Video Surveillance. Height limit 2.10 m','https://www.pls-zh.ch/parkhaus/octavo.jsp?pid=octavo'),
-    (100020,'Op‚ra',299,0,'Schillerstrasse','5',8001, 'Zurich',47.3650446,8.5472283, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',5, 'Height limit 2.10 m','https://www.pls-zh.ch/parkhaus/opera.jsp?pid=opera'),
+    (100020,'Opera',299,0,'Schillerstrasse','5',8001, 'Zurich',47.3650446,8.5472283, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',5, 'Height limit 2.10 m','https://www.pls-zh.ch/parkhaus/opera.jsp?pid=opera'),
     (100021,'P West',1000,0,'Foerrlibuckstrasse','151',8002, 'Zurich',47.3919439,8.5104258, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',1.5, 'Video Surveillance. Height limit 1.80 m','https://www.pls-zh.ch/parkhaus/p_west.jsp?pid=p_west'),
     (100022,'Park Hyatt',267,0,'Beethovenstrasse','21',8002, 'Zurich',47.3663825,8.5361252, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',5.5, 'Height limit 2.10 m','https://www.pls-zh.ch/parkhaus/park_hyatt.jsp?pid=park_hyatt'),
     (100023,'Parkside',38,0,'Sophie-Taeuber-Strasse','10',8050, 'Zurich',47.4125472,8.5394554, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',3, 'Video Surveillance. Height limit 2.10 m','https://www.pls-zh.ch/parkhaus/parkside.jsp?pid=parkside'),
@@ -34,7 +34,5 @@ INSERT INTO CARPARK (ID, NAME, MAX_CAPACITY, NUM_OF_EMPTY_SPACES, STREET, STREET
     (100032,'Zuerichhorn',245,0,'Dufourstrasse','142',8008, 'Zurich',47.3555429,8.5532238, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',3, 'Height limit 2.00 m.  Permanent rental on demand. Gas station and car wash','https://www.pls-zh.ch/parkhaus/zuerichhorn.jsp?pid=zuerichhorn'),
     (100033,'Theater 11',188,0,'Doerfli-/Thurgauerstrasse','',8050, 'Zurich',47.4107041,8.549748, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',3, '','https://www.pls-zh.ch/parkhaus/theater_11.jsp?pid=theater_11'),
     (100034,'USZ Sued',80,0,'Gloriastrasse','',8091, 'Zurich',47.3759766,8.5533975, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',4, '','https://www.pls-zh.ch/parkhaus/unispital_sued.jsp?pid=unispital_sued'),
-    (100035,'Puls 5',62,0,'Giessereistrasse','18',8005, 'Zurich',47.3910785,8.5175834, TRUE, '06:00:00', '23:59:59', '06:00:00', '23:59:59',2.5, 'Video Surveillance. Height limit 2.00 m','https://www.pls-zh.ch/parkhaus/puls5.jsp?pid=puls5')
-
-;
+    (100035,'Puls 5',62,0,'Giessereistrasse','18',8005, 'Zurich',47.3910785,8.5175834, TRUE, '06:00:00', '23:59:59', '06:00:00', '23:59:59',2.5, 'Video Surveillance. Height limit 2.00 m','https://www.pls-zh.ch/parkhaus/puls5.jsp?pid=puls5');
 
