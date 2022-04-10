@@ -97,7 +97,7 @@ public class UserController {
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(loggedOutUser);
     }
 
-    @PutMapping ("/users/{userId}")
+    @PutMapping ("/users/{userId}/profile")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUser(@RequestBody UserPutDTO userPutDTO, @PathVariable(value = "userId") Long id) {
         // convert API user updates to internal representation
@@ -108,6 +108,18 @@ public class UserController {
 
         // update user
         User updatedUser = userService.updateUser(userToBeUpdated, userUpdateRequest);
+
+    }
+
+    @DeleteMapping ("/users/{userId}/profile")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable(value = "userId") Long id) {
+
+        // get user to be deleted from path variable userId
+        User userToBeDeleted = userService.getSingleUserById(id);
+
+        // delete user
+        int response = userService.deleteUser(userToBeDeleted);
 
     }
 }

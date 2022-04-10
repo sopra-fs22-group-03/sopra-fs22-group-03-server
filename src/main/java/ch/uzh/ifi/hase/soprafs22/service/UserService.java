@@ -133,6 +133,32 @@ public class UserService {
         return userToBeUpdated;
     }
 
+    public int deleteUser (User userToBeDeleted) {
+
+        // TODO: CHECK HTTP STATUS CODE OF ERROR
+        // check if user has no unpaid billings; otherwise, throw error
+        if (!userHasPaidAllBillings(userToBeDeleted)) {
+            String baseErrorMessage = "The user with username %s has unpaid billings. Deletion of user not possible." +
+                    "Please pay all bills first.";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, userToBeDeleted.getUsername()));
+        }
+
+        // TODO: CHECK HTTP STATUS CODE OF ERROR
+        // check if user is not checked-in in a carpark; otherwise, throw error
+        if (!userIsCheckedOutOfAllParkings(userToBeDeleted)) {
+            String baseErrorMessage = "The user with username %s is still checked-in in a carpark. Deletion of user not possible." +
+                    "Please check-out (and pay the corresponding bill) first.";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, userToBeDeleted.getUsername()));
+        }
+
+        // delete user
+        // existingUser.setIsLoggedIn(false);
+        // existingUser = userRepository.save(existingUser);
+        // userRepository.flush();
+
+        return 0;
+    }
+
     /**
      * This is a helper method that will check the uniqueness criteria of the
      * username and the name
@@ -164,6 +190,16 @@ public class UserService {
         if (userByUsername != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username"));
         }
+    }
+
+    // TODO: Implement check that user has no outstanding bills
+    private boolean userHasPaidAllBillings(User user) {
+        return true;
+    }
+
+    // TODO: Implement check that user is currently not checked-in into a parking
+    private boolean userIsCheckedOutOfAllParkings(User user) {
+        return true;
     }
 
 }
