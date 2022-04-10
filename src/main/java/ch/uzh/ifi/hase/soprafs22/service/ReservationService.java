@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs22.entity.Reservation;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.ReservationRepository;
+import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,12 @@ public class ReservationService {
     private final Logger log = LoggerFactory.getLogger(ReservationService.class);
 
     private final ReservationRepository reservationRepository;
+    private final UserService userService;
 
     @Autowired
-    public ReservationService(@Qualifier("reservationRepository") ReservationRepository reservationRepository) {
+    public ReservationService(@Qualifier("reservationRepository") ReservationRepository reservationRepository, UserService userService) {
         this.reservationRepository = reservationRepository;
+        this.userService = userService;
     }
 
     public List<Reservation> getAllReservationsByUserId(long userId) {
@@ -56,10 +59,30 @@ public class ReservationService {
         // DO CHECKS IF RESERVATION IS VALID / EMPTY SPACES IN PARKING ETC.
         //...
 
+        // add licensePlate to newReservation
+        User userOfReservation = userService.getSingleUserById(newReservation.getUserId());
+        newReservation.setLicensePlate(userOfReservation.getLicensePlate());
+
+        // calculate parkingFee
+        // ...
+
         newReservation = reservationRepository.save(newReservation);
         reservationRepository.flush();
 
         return newReservation;
+    }
+
+    public int deleteAllReservationsOfUserId (long userId) {
+
+        // delete all future reservations of user
+        try {
+            reservationRepository.deleteAllByUserId(userId);
+            reservationRepository.flush();
+            return 0;
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(500), "Deletion of future reservations failed.");
+        }
     }
 
 }

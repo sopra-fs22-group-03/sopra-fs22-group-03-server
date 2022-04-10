@@ -45,7 +45,7 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private String licensePlate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private long parkingFee;
 
     public long getId() {

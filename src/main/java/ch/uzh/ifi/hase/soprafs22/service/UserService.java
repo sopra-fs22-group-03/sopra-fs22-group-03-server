@@ -133,7 +133,9 @@ public class UserService {
         return userToBeUpdated;
     }
 
-    public int deleteUser (User userToBeDeleted) {
+    public int deleteUser (long userId) {
+
+        User userToBeDeleted = getSingleUserById(userId);
 
         // TODO: CHECK HTTP STATUS CODE OF ERROR
         // check if user has no unpaid billings; otherwise, throw error
@@ -152,11 +154,14 @@ public class UserService {
         }
 
         // delete user
-        // existingUser.setIsLoggedIn(false);
-        // existingUser = userRepository.save(existingUser);
-        // userRepository.flush();
-
-        return 0;
+        try {
+            userRepository.deleteById(userId);
+            userRepository.flush();
+            return 0;
+            }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(500), "Deletion of user profile failed.");
+        }
     }
 
     /**
@@ -189,6 +194,16 @@ public class UserService {
         String baseErrorMessage = "The %s provided already exists. Therefore, the user could not be created. Please pick a different username!";
         if (userByUsername != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username"));
+        }
+    }
+
+    private void checkIfUserIdIsValid(long id) {
+        boolean userExists = userRepository.existsById(id);
+
+        // throw error if user does not exist
+        if (!userExists) {
+            String baseErrorMessage = "The user with id %d was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, id));
         }
     }
 

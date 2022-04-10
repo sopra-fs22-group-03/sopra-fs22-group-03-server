@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs22.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
+import ch.uzh.ifi.hase.soprafs22.service.ReservationService;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
+    private final ReservationService reservationService;
 
-  UserController(UserService userService) {
-    this.userService = userService;
-  }
+    UserController(UserService userService, ReservationService reservationService) {
+        this.userService = userService;
+        this.reservationService = reservationService;
+    }
 
 //  @GetMapping("/users")
 //  @ResponseStatus(HttpStatus.OK)
@@ -40,32 +43,32 @@ public class UserController {
 //    return userGetDTOs;
 //  }
 
-  @PostMapping("/users")
-  @ResponseStatus(HttpStatus.CREATED)
-  @ResponseBody
-  public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
-    // convert API user to internal representation
-    User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+    @PostMapping("/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
+        // convert API user to internal representation
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
-    // create user
-    User createdUser = userService.createUser(userInput);
+        // create user
+        User createdUser = userService.createUser(userInput);
 
-    // convert internal representation of user back to API
-    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
-  }
+        // convert internal representation of user back to API
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+    }
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public UserGetDTO loginUser(@RequestBody UserPostDTO userPostDTO) {
-      // convert API user to internal representation
-      User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+        // convert API user to internal representation
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
-      // login user
-      User loggedInUser = userService.loginUser(userInput);
+        // login user
+        User loggedInUser = userService.loginUser(userInput);
 
-      // convert internal representation of user back to API
-      return DTOMapper.INSTANCE.convertEntityToUserGetDTO(loggedInUser);
+        // convert internal representation of user back to API
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(loggedInUser);
     }
 
     @GetMapping("/users/{userId}/profile")
@@ -97,7 +100,7 @@ public class UserController {
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(loggedOutUser);
     }
 
-    @PutMapping ("/users/{userId}/profile")
+    @PutMapping("/users/{userId}/profile")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUser(@RequestBody UserPutDTO userPutDTO, @PathVariable(value = "userId") Long id) {
         // convert API user updates to internal representation
@@ -111,15 +114,15 @@ public class UserController {
 
     }
 
-    @DeleteMapping ("/users/{userId}/profile")
+    @DeleteMapping("/users/{userId}/profile")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(value = "userId") Long id) {
 
-        // get user to be deleted from path variable userId
-        User userToBeDeleted = userService.getSingleUserById(id);
+        // delete user profile
+        int response1 = userService.deleteUser(id);
 
-        // delete user
-        int response = userService.deleteUser(userToBeDeleted);
+        // delete all future reservations associated with user to be deleted
+        int response2 = reservationService.deleteAllReservationsOfUserId(id);
 
     }
 }
