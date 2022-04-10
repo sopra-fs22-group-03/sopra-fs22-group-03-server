@@ -10,7 +10,7 @@ public class ParkingslipGetDTO {
     private String checkoutDate;
     private String checkoutTime;
     private String licensePlate;
-    private long parkingFee;
+    private float parkingFee;
 
     public long getParkingslipId() {
         return parkingslipId;
@@ -76,11 +76,11 @@ public class ParkingslipGetDTO {
         this.licensePlate = licensePlate;
     }
 
-    public long getParkingFee() {
+    public float getParkingFee() {
         return parkingFee;
     }
 
-    public void setParkingFee(long parkingFee) {
+    public void setParkingFee(float parkingFee) {
         this.parkingFee = parkingFee;
     }
 }

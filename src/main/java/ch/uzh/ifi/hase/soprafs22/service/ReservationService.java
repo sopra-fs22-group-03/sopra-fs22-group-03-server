@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Billing;
+import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
 import ch.uzh.ifi.hase.soprafs22.entity.Reservation;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
@@ -15,7 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import static java.time.temporal.ChronoUnit.*;
 
 /**
  * Reservation Service
@@ -32,11 +37,14 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final UserService userService;
+    private final CarparkService carparkService;
 
     @Autowired
-    public ReservationService(@Qualifier("reservationRepository") ReservationRepository reservationRepository, UserService userService) {
+    public ReservationService(@Qualifier("reservationRepository") ReservationRepository reservationRepository, UserService userService,
+                              CarparkService carparkService) {
         this.reservationRepository = reservationRepository;
         this.userService = userService;
+        this.carparkService = carparkService;
     }
 
     public List<Reservation> getAllReservationsByUserId(long userId) {
@@ -54,7 +62,7 @@ public class ReservationService {
         return reservationByReservationId;
     }
 
-//    TODO (Implement checks if reservation requested by user is possible/valid at specified carpark, time, date, ..)
+//    TODO (Implement checks if reservation requested by user is valid (minimum duration) and possible at specified carpark, time, date, ..)
     public Reservation createReservation(Reservation newReservation) {
         // DO CHECKS IF RESERVATION IS VALID / EMPTY SPACES IN PARKING ETC.
         //...
@@ -63,9 +71,11 @@ public class ReservationService {
         User userOfReservation = userService.getSingleUserById(newReservation.getUserId());
         newReservation.setLicensePlate(userOfReservation.getLicensePlate());
 
-        // calculate parkingFee
-        // ...
+        // calculate total parking fee of reservation and write it to newReservation
+        float parkingFee = calculateParkingFeeOfReservation(newReservation);
+        newReservation.setParkingFee(parkingFee);
 
+        // save reservation
         newReservation = reservationRepository.save(newReservation);
         reservationRepository.flush();
 
@@ -83,6 +93,34 @@ public class ReservationService {
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.valueOf(500), "Deletion of future reservations failed.");
         }
+    }
+
+    /**
+     *
+     * HELPER FUNCTIONS
+     *
+     */
+
+    private float calculateParkingFeeOfReservation(Reservation reservation) {
+
+        // retrieve carpark of reservation
+        Carpark carparkOfReservation = carparkService.getSingleCarparkById(reservation.getCarparkId());
+
+        // convert datetime string in correct format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+        String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
+
+        // calculate reservation duration in minutes
+        LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+        LocalDateTime reservationEnd = LocalDateTime.parse(checkoutDateTime, formatter);
+        float parkingDurationInMinutes = MINUTES.between(reservationStart, reservationEnd);
+
+        // calculate total parkingFee
+        float hourlyParkingTariff = carparkOfReservation.getHourlyTariff();
+        float parkingFee = parkingDurationInMinutes*(hourlyParkingTariff/60);
+
+        return parkingFee;
     }
 
 }

@@ -45,8 +45,8 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private String licensePlate;
 
-    @Column(nullable = true)
-    private long parkingFee;
+    @Column(nullable = false)
+    private float parkingFee;
 
     public long getId() {
         return id;
@@ -112,11 +112,11 @@ public class Reservation implements Serializable {
         this.licensePlate = licensePlate;
     }
 
-    public long getParkingFee() {
+    public float getParkingFee() {
         return parkingFee;
     }
 
-    public void setParkingFee(long parkingFee) {
+    public void setParkingFee(float parkingFee) {
         this.parkingFee = parkingFee;
     }
 
