@@ -95,6 +95,38 @@ public class ReservationService {
         }
     }
 
+    public Reservation updateReservation(Reservation reservationToBeUpdated, Reservation reservationUpdateRequest) {
+
+
+        // update fields which are provided by user (=not null)
+        if (reservationUpdateRequest.getCheckinDate() != null) {
+            reservationToBeUpdated.setCheckinDate(reservationUpdateRequest.getCheckinDate());
+        }
+
+        if (reservationUpdateRequest.getCheckinTime() != null) {
+            reservationToBeUpdated.setCheckinTime(reservationUpdateRequest.getCheckinTime());
+        }
+
+        if (reservationUpdateRequest.getCheckoutDate() != null) {
+            reservationToBeUpdated.setCheckoutDate(reservationUpdateRequest.getCheckoutDate());
+        }
+
+        if (reservationUpdateRequest.getCheckoutTime() != null) {
+            reservationToBeUpdated.setCheckoutTime(reservationUpdateRequest.getCheckoutTime());
+        }
+
+        // calculate new total parking fee of reservation
+        float parkingFee = calculateParkingFeeOfReservation(reservationToBeUpdated);
+        reservationToBeUpdated.setParkingFee(parkingFee);
+
+        // save changes
+        reservationToBeUpdated = reservationRepository.save(reservationToBeUpdated);
+        reservationRepository.flush();
+
+        log.debug("Updated Information for Reservation: {}", reservationToBeUpdated);
+        return reservationToBeUpdated;
+    }
+
     /**
      *
      * HELPER FUNCTIONS

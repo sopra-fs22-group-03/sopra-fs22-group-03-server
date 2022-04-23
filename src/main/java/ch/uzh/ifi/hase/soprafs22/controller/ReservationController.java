@@ -81,5 +81,25 @@ public class ReservationController {
         return createdReservationDTO;
     }
 
+    @PutMapping("/reservations/{reservationId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ReservationGetDTO updateReservation(@RequestBody ReservationPutDTO reservationPutDTO, @PathVariable(value = "reservationId") long reservationId) {
+
+        // convert update requests to internal representation
+        Reservation reservationUpdateRequest = DTOMapper.INSTANCE.convertReservationPutDTOtoEntity(reservationPutDTO);
+
+        // get internal reservation representation by provided path variable reservationId
+        Reservation reservationBeforeUpdate = reservationService.getSingleReservationByReservationId(reservationId);
+
+        // update reservation
+        Reservation reservationAfterUpdate = reservationService.updateReservation(reservationBeforeUpdate, reservationUpdateRequest);
+
+        // convert internal representation to API representation
+        ReservationGetDTO updatedReservationGetDTO = DTOMapper.INSTANCE.convertEntityToReservationGetDTO(reservationAfterUpdate);
+
+        return updatedReservationGetDTO;
+    }
+
     // TODO: PUT and DELETE mappings
 }
