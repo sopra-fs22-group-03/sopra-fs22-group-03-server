@@ -55,7 +55,7 @@ public class User implements Serializable {
     private String licensePlate;
 
     @Column(nullable = false)
-    private long creditCardNumber;
+    private Long creditCardNumber;
 
     @Column(nullable = false, unique = true)
     private String token;
@@ -143,11 +143,11 @@ public class User implements Serializable {
         this.licensePlate = licensePlate;
     }
 
-    public long getCreditCardNumber() {
+    public Long getCreditCardNumber() {
         return creditCardNumber;
     }
 
-    public void setCreditCardNumber(long creditCardNumber) {
+    public void setCreditCardNumber(Long creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
     }
 

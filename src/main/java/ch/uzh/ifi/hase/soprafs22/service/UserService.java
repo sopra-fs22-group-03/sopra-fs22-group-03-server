@@ -114,18 +114,41 @@ public class UserService {
 
     public User updateUser(User userToBeUpdated, User userUpdateRequest) {
 
-        // update birthday if provided birthday is not null
-//        if (userUpdateRequest.getBirthday() != null) {
-//            userToBeUpdated.setBirthday(userUpdateRequest.getBirthday());
-//        }
-
-        // update username if provided username is not null
+        // update fields which are provided by user (=not null)
         if (userUpdateRequest.getUsername() != null) {
+            checkIfUsernameExists(userUpdateRequest.getUsername());
             userToBeUpdated.setUsername(userUpdateRequest.getUsername());
         }
+        if (userUpdateRequest.getPassword() != null) {
+            userToBeUpdated.setPassword(userUpdateRequest.getPassword());
+        }
+        if (userUpdateRequest.getStreet() != null) {
+            userToBeUpdated.setStreet(userUpdateRequest.getStreet());
+        }
+        if (userUpdateRequest.getStreetNo() != null) {
+            userToBeUpdated.setStreetNo(userUpdateRequest.getStreetNo());
+        }
+        if (userUpdateRequest.getZipCode() != null) {
+            userToBeUpdated.setZipCode(userUpdateRequest.getZipCode());
+        }
+        if (userUpdateRequest.getCity() != null) {
+            userToBeUpdated.setCity(userUpdateRequest.getCity());
+        }
+        if (userUpdateRequest.getPhoneNumber() != null) {
+            userToBeUpdated.setPhoneNumber(userUpdateRequest.getPhoneNumber());
+        }
+        if (userUpdateRequest.getEmail() != null) {
+            checkIfEmailExists(userUpdateRequest.getEmail());
+            userToBeUpdated.setEmail(userUpdateRequest.getEmail());
+        }
+        if (userUpdateRequest.getLicensePlate() != null) {
+            userToBeUpdated.setLicensePlate(userUpdateRequest.getLicensePlate());
+        }
+        if (userUpdateRequest.getCreditCardNumber() != null) {
+            userToBeUpdated.setCreditCardNumber(userUpdateRequest.getCreditCardNumber());
+        }
 
-        // saves the given entity but data is only persisted in the database once
-        // flush() is called
+        // save changes
         userToBeUpdated = userRepository.save(userToBeUpdated);
         userRepository.flush();
 
@@ -170,31 +193,25 @@ public class UserService {
      * defined in the User entity. The method will do nothing if the input is unique
      * and throw an error otherwise.
      *
-     * @param userToBeCreated
+     * @param user
      * @throws ResponseStatusException
      * @see User
      */
-//  private void checkIfUserExists(User userToBeCreated) {
-//    User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
-//    // User userByName = userRepository.findByName(userToBeCreated.getName());
-//
-//    String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
-//    if (userByUsername != null && userByName != null) {
-//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-//          String.format(baseErrorMessage, "username and the name", "are"));
-//    } else if (userByUsername != null) {
-//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
-//    } else if (userByName != null) {
-//      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
-//    }
-//  }
-    private void checkIfUserExists(User userToBeCreated) {
-        User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
+    private void checkIfUserExists(User user) {
+        User userByUsername = userRepository.findByUsername(user.getUsername());
+        User userByEmail = userRepository.findByEmail(user.getEmail());
 
-        String baseErrorMessage = "The %s provided already exists. Therefore, the user could not be created. Please pick a different username!";
-        if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username"));
+        String baseErrorMessage = "The %s provided already %s. Therefore, the user could not be created!";
+        if (userByUsername != null && userByEmail != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username and the email", "exist"));
         }
+        else if (userByUsername != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "exists"));
+        }
+        else if (userByEmail != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "email", "exists"));
+        }
+
     }
 
     private void checkIfUserIdIsValid(long id) {
@@ -204,6 +221,24 @@ public class UserService {
         if (!userExists) {
             String baseErrorMessage = "The user with id %d was not found";
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, id));
+        }
+    }
+
+    private void checkIfUsernameExists(String username) {
+        boolean userExists = userRepository.existsByUsername(username);
+
+        // throw error if username already exists
+        if (userExists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The provided username already exists. Please pick a different one.");
+        }
+    }
+
+    private void checkIfEmailExists(String email) {
+        boolean userExists = userRepository.existsByEmail(email);
+
+        // throw error if email already exists
+        if (userExists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The provided email already exists. Please pick a different one.");
         }
     }
 

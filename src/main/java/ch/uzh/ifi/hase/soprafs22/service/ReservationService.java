@@ -95,6 +95,7 @@ public class ReservationService {
         }
     }
 
+    //    TODO (Implement checks if reservation requested by user is valid (minimum duration) and possible at specified carpark, time, date, ..)
     public Reservation updateReservation(Reservation reservationToBeUpdated, Reservation reservationUpdateRequest) {
 
 

@@ -101,8 +101,8 @@ public class UserController {
     }
 
     @PutMapping("/users/{userId}/profile")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateUser(@RequestBody UserPutDTO userPutDTO, @PathVariable(value = "userId") Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public UserGetDTO updateUser(@RequestBody UserPutDTO userPutDTO, @PathVariable(value = "userId") Long id) {
         // convert API user updates to internal representation
         User userUpdateRequest = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
@@ -111,6 +111,11 @@ public class UserController {
 
         // update user
         User updatedUser = userService.updateUser(userToBeUpdated, userUpdateRequest);
+
+        // convert internal representation to API representation
+        UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(updatedUser);
+
+        return userGetDTO;
 
     }
 
