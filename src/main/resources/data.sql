@@ -36,3 +36,6 @@ INSERT INTO CARPARK (ID, NAME, MAX_CAPACITY, NUM_OF_EMPTY_SPACES, STREET, STREET
     (100034,'USZ Sued',80,0,'Gloriastrasse','',8091, 'Zurich',47.3759766,8.5533975, TRUE, '00:00:00', '23:59:59', '00:00:00', '23:59:59',4, '','https://www.pls-zh.ch/parkhaus/unispital_sued.jsp?pid=unispital_sued'),
     (100035,'Puls 5',62,0,'Giessereistrasse','18',8005, 'Zurich',47.3910785,8.5175834, TRUE, '06:00:00', '23:59:59', '06:00:00', '23:59:59',2.5, 'Video Surveillance. Height limit 2.00 m','https://www.pls-zh.ch/parkhaus/puls5.jsp?pid=puls5');
 
+INSERT INTO USER (ID, CITY, CREDIT_CARD_NUMBER, EMAIL, IS_LOGGED_IN, IS_MANAGER, LICENSE_PLATE, PASSWORD, PHONE_NUMBER, STREET, STREET_NO, TOKEN, USERNAME, ZIP_CODE) VALUES
+    (200001, 'Zurich', 1111111111111111, 'test_user1@gmail.com', FALSE, FALSE, 'ZH1', 'pw1', '0790000001', 'Musterstrasse', '1', '14527952-3ce3-465e-9674-b7ef35d02911', 'test_user1', '8000'),
+    (200002, 'Zurich', 2222222222222222, 'test_user2@gmail.com', FALSE, FALSE, 'ZH2', 'pw2', '0790000002', 'Musterstrasse', '2', '24527952-3ce3-465e-9674-b7ef35d02912', 'test_user2', '8000');
