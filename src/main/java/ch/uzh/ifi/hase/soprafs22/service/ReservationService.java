@@ -160,6 +160,9 @@ public class ReservationService {
             reservationToBeUpdated.setCheckoutTime(reservationUpdateRequest.getCheckoutTime());
         }
 
+        // check if new reservation is possible due to max Capacity already reached by other reservations in specified timeslot
+        checkIfReservationIsPossible(reservationToBeUpdated);
+
         // calculate new total parking fee of reservation
         float parkingFee = calculateParkingFeeOfReservation(reservationToBeUpdated);
         reservationToBeUpdated.setParkingFee(parkingFee);
