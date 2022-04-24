@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
+import ch.uzh.ifi.hase.soprafs22.repository.CarparkRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.ReservationRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import org.slf4j.Logger;
@@ -70,6 +71,9 @@ public class ReservationService {
     public Reservation createReservation(Reservation newReservation) {
         // DO CHECKS IF RESERVATION IS VALID / EMPTY SPACES IN PARKING ETC.
         //...
+
+        // retrieve carpark of reservation
+        Carpark carparkOfReservation = carparkService.getSingleCarparkById(newReservation.getCarparkId());
 
         // add licensePlate to newReservation
         User userOfReservation = userService.getSingleUserById(newReservation.getUserId());
@@ -211,9 +215,6 @@ public class ReservationService {
 
         // calculate difference between now and Check-In time in minutes
         long differenceInMinutes = MINUTES.between(reservationStart, now)*(-1);
-        System.out.println(reservationStart);
-        System.out.println(now);
-        System.out.println(differenceInMinutes);
 
         // check if more than specified X minutes in advance
         if (differenceInMinutes >= minutes) {
@@ -237,12 +238,12 @@ public class ReservationService {
 
     }
 
+    // delete billing associated with reservation
     private int deleteBillingFromReservation(Reservation reservation) {
         long reservationId = reservation.getId();
         Billing billingOfToBeDeletedReservation = billingRepository.findByBookingTypeAndBookingId(BookingType.RESERVATION, reservationId);
         long billingIdOfToBeDeletedReservation = billingOfToBeDeletedReservation.getId();
 
-        // delete billing associated with reservation
         try {
             billingRepository.deleteById(billingIdOfToBeDeletedReservation);
             billingRepository.flush();
@@ -251,6 +252,44 @@ public class ReservationService {
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.valueOf(500), "Deletion of billing associated with reservation failed.");
         }
+    }
+
+    public int countReservationsInCarparkAtDateTime(Carpark carpark, ZonedDateTime zonedDateTime) {
+        // retrieve carparkId
+        long carparkId = carpark.getId();
+
+        // find all reservations for specified carpark
+        List<Reservation> allReservationsInCarpark = reservationRepository.findAllByCarparkId(carparkId);
+
+        // define DateTimeFormatter
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+        // convert zonedDateTime to DateTime
+        LocalDateTime dateTime = zonedDateTime.toLocalDateTime();
+
+        // count all reservations whose checkinDateTime is before and checkoutDateTime is after the specified zonedDateTime
+        int counter = 0;
+        for (Reservation reservation : allReservationsInCarpark) {
+            // concatenate Date and Times
+            String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+            String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
+
+            // convert into DateTime Format
+            LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+            LocalDateTime reservationEnd = LocalDateTime.parse(checkoutDateTime, formatter);
+
+            // check if checkinDateTime is before and checkoutDateTime is after the specified zonedDateTime
+            boolean isBefore = reservationStart.isBefore(dateTime);
+            boolean isAfter = reservationEnd.isAfter(dateTime);
+
+            // increment counter
+            if (isBefore && isAfter) {
+                counter++;
+            }
+        }
+
+        return counter;
+
     }
 
 }

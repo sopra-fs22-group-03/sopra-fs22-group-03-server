@@ -2,13 +2,11 @@ package ch.uzh.ifi.hase.soprafs22.service;
 
 import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
-import ch.uzh.ifi.hase.soprafs22.entity.Billing;
-import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
-import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.repository.CarparkRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.ParkingslipRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
+import ch.uzh.ifi.hase.soprafs22.repository.ReservationRepository;
 import ch.uzh.ifi.hase.soprafs22.rss.Feed;
 import ch.uzh.ifi.hase.soprafs22.rss.FeedMessage;
 import ch.uzh.ifi.hase.soprafs22.rss.RSSFeedParser;
@@ -22,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -44,14 +43,18 @@ public class CarparkService {
 
     private final BillingRepository billingRepository;
 
+    private final ReservationRepository reservationRepository;
+
 
     @Autowired
     public CarparkService(@Qualifier("carparkRepository") CarparkRepository carparkRepository,
                           @Qualifier("parkingslipRepository") ParkingslipRepository parkingslipRepository,
-                          @Qualifier("billingRepository") BillingRepository billingRepository) {
+                          @Qualifier("billingRepository") BillingRepository billingRepository,
+                          ReservationRepository reservationRepository) {
         this.carparkRepository = carparkRepository;
         this.parkingslipRepository = parkingslipRepository;
         this.billingRepository = billingRepository;
+        this.reservationRepository = reservationRepository;
 
     }
 
@@ -184,6 +187,12 @@ public class CarparkService {
             // get the number of checked-in cars for this carpark
             int numParkingslips = parkingslipRepository.countByCarparkId(carparkId);
 
+            // get number of reservations for this carpark
+            ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
+            ZonedDateTime now = ZonedDateTime.now(zurichZoneId);            // get current time in Zurich
+            int numReservations = countReservationsInCarparkAtDateTime(carparkByLink, now);
+            System.out.println("NUM of Reservations: " + numReservations);
+
             int emptySpaces;
             try {
                 emptySpaces = Integer.parseInt(emptySpacesString);
@@ -194,7 +203,7 @@ public class CarparkService {
 
             if (status.equals("open")) {
                 carparkByLink.setOpen(true);
-                carparkByLink.setNumOfEmptySpaces(emptySpaces - numParkingslips);
+                carparkByLink.setNumOfEmptySpaces(emptySpaces - numParkingslips - numReservations);
             }
             else {
                 carparkByLink.setOpen(false);
@@ -213,6 +222,44 @@ public class CarparkService {
 
         billing = billingRepository.save(billing);
         billingRepository.flush();
+
+    }
+
+    public int countReservationsInCarparkAtDateTime(Carpark carpark, ZonedDateTime zonedDateTime) {
+        // retrieve carparkId
+        long carparkId = carpark.getId();
+
+        // find all reservations for specified carpark
+        List<Reservation> allReservationsInCarpark = reservationRepository.findAllByCarparkId(carparkId);
+
+        // define DateTimeFormatter
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+        // convert zonedDateTime to DateTime
+        LocalDateTime dateTime = zonedDateTime.toLocalDateTime();
+
+        // count all reservations whose checkinDateTime is before and checkoutDateTime is after the specified zonedDateTime
+        int counter = 0;
+        for (Reservation reservation : allReservationsInCarpark) {
+            // concatenate Date and Times
+            String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+            String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
+
+            // convert into DateTime Format
+            LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+            LocalDateTime reservationEnd = LocalDateTime.parse(checkoutDateTime, formatter);
+
+            // check if checkinDateTime is before and checkoutDateTime is after the specified zonedDateTime
+            boolean isBefore = reservationStart.isBefore(dateTime);
+            boolean isAfter = reservationEnd.isAfter(dateTime);
+
+            // increment counter
+            if (isBefore && isAfter) {
+                counter++;
+            }
+        }
+
+        return counter;
 
     }
 
