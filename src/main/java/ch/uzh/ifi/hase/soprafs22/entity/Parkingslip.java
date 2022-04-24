@@ -46,7 +46,7 @@ public class Parkingslip implements Serializable {
     private String licensePlate;
 
     @Column(nullable = true)
-    private long parkingFee;
+    private float parkingFee;
 
     public long getId() {
         return id;
@@ -116,7 +116,7 @@ public class Parkingslip implements Serializable {
         return parkingFee;
     }
 
-    public void setParkingFee(long parkingFee) {
+    public void setParkingFee(float parkingFee) {
         this.parkingFee = parkingFee;
     }
 

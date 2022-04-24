@@ -115,7 +115,7 @@ public class CarparkService {
         return parkingslipCheckin;
     }
 
-//    TODO (throws 404 exception if user is currently not checked-in within carpark)
+    // throws 404 exception if user is currently not checked-in within carpark
     public Parkingslip performCheckoutOfUser(User user, Carpark carpark) {
         long userId = user.getId();
         long hourlyTariff = carpark.getHourlyTariff();
@@ -143,7 +143,7 @@ public class CarparkService {
 
 
         // calculate parking fee
-        long parkingFee = (long) ChronoUnit.MINUTES.between(dateTimeCheckinFrom, dateTimeCheckoutTo) * hourlyTariff /60;
+        float parkingFee = (float) ChronoUnit.MINUTES.between(dateTimeCheckinFrom, dateTimeCheckoutTo) * hourlyTariff /60;
         parkingslipCheckout.setParkingFee(parkingFee);
 
         parkingslipCheckout = parkingslipRepository.save(parkingslipCheckout);
