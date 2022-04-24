@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -102,8 +99,14 @@ public class CarparkService {
         Parkingslip parkingslipCheckin = new Parkingslip();
         parkingslipCheckin.setUserId(userId);
         parkingslipCheckin.setCarparkId(carparkId);
-        parkingslipCheckin.setCheckinDate(LocalDate.now().toString());
-        parkingslipCheckin.setCheckinTime(LocalTime.now().toString());
+
+        ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
+        ZonedDateTime now = ZonedDateTime.now(zurichZoneId);
+        parkingslipCheckin.setCheckinDate(LocalDate.from(now).toString());
+        parkingslipCheckin.setCheckinTime(LocalTime.from(now).toString());
+//        parkingslipCheckin.setCheckinDate(LocalDate.now().toString());
+//        parkingslipCheckin.setCheckinTime(LocalTime.now().toString());
+
         parkingslipCheckin.setLicensePlate(user.getLicensePlate());
 
         parkingslipCheckin = parkingslipRepository.save(parkingslipCheckin);
@@ -128,8 +131,13 @@ public class CarparkService {
         // check that user can only check out in the respective car park!
 
         Parkingslip parkingslipCheckout = parkingslipRepository.findParkingslipByUserIdAndCheckoutDateIsNull(userId);
-        parkingslipCheckout.setCheckoutDate(LocalDate.now().toString());
-        parkingslipCheckout.setCheckoutTime(LocalTime.now().toString());
+
+        ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
+        ZonedDateTime now = ZonedDateTime.now(zurichZoneId);
+        parkingslipCheckout.setCheckoutDate(LocalDate.from(now).toString());
+        parkingslipCheckout.setCheckoutTime(LocalTime.from(now).toString());
+//        parkingslipCheckout.setCheckoutDate(LocalDate.now().toString());
+//        parkingslipCheckout.setCheckoutTime(LocalTime.now().toString());
 
         parkingslipCheckout.setParkingFee(hourlyTariff);
 
@@ -139,7 +147,7 @@ public class CarparkService {
         LocalDateTime dateTimeCheckin = LocalDateTime.of(dateCheckin, timeCheckin);
         LocalDateTime dateTimeCheckinFrom = LocalDateTime.from(dateTimeCheckin);
 
-        LocalDateTime dateTimeCheckoutTo = LocalDateTime.now();
+        LocalDateTime dateTimeCheckoutTo = LocalDateTime.from(now);
 
 
         // calculate parking fee
