@@ -165,7 +165,7 @@ public class UserService {
         if (!userHasPaidAllBillings(userToBeDeleted)) {
             String baseErrorMessage = "The user with username %s has unpaid billings. Deletion of user not possible." +
                     "Please pay all bills first.";
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, userToBeDeleted.getUsername()));
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, userToBeDeleted.getUsername()));
         }
 
         // TODO: CHECK HTTP STATUS CODE OF ERROR
@@ -173,7 +173,7 @@ public class UserService {
         if (!userIsCheckedOutOfAllParkings(userToBeDeleted)) {
             String baseErrorMessage = "The user with username %s is still checked-in in a carpark. Deletion of user not possible." +
                     "Please check-out (and pay the corresponding bill) first.";
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, userToBeDeleted.getUsername()));
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, userToBeDeleted.getUsername()));
         }
 
         // delete user

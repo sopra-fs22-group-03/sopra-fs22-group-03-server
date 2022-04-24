@@ -19,6 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import static java.time.temporal.ChronoUnit.*;
 
@@ -95,6 +97,30 @@ public class ReservationService {
         }
     }
 
+    public int deleteSingleReservationByReservationId (long reservationId) {
+
+        Reservation reservationToBeDeleted = getSingleReservationByReservationId(reservationId);
+
+        // check if cancellation of reservation is more than 2 hours in advance
+        boolean is2HoursInAdvance = isReservationCheckInXMinutesInAdvance(reservationToBeDeleted, 120);
+
+        if (is2HoursInAdvance) {
+            // delete reservation
+            try {
+                reservationRepository.deleteById(reservationId);
+                reservationRepository.flush();
+                return 0;
+            }
+            catch (Exception e) {
+                throw new ResponseStatusException(HttpStatus.valueOf(500), "Deletion of reservation failed.");
+            }
+        }
+        // throw exception if reservation starts in less than 2 hours
+        else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Reservation starts in less than 2 hours. Hence, deletion is not possible anymore.");
+        }
+    }
+
     //    TODO (Implement checks if reservation requested by user is valid (minimum duration) and possible at specified carpark, time, date, ..)
     public Reservation updateReservation(Reservation reservationToBeUpdated, Reservation reservationUpdateRequest) {
 
@@ -154,6 +180,34 @@ public class ReservationService {
         float parkingFee = parkingDurationInMinutes*(hourlyParkingTariff/60);
 
         return parkingFee;
+    }
+
+    private boolean isReservationCheckInXMinutesInAdvance(Reservation reservation, long minutes) {
+
+        // convert datetime string in correct format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+
+        // convert into LocalDateTime
+        LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+
+        // get current time in Zurich
+        ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
+        ZonedDateTime now = ZonedDateTime.now(zurichZoneId);
+
+        // calculate difference between now and Check-In time in minutes
+        long differenceInMinutes = MINUTES.between(reservationStart, now)*(-1);
+        System.out.println(reservationStart);
+        System.out.println(now);
+        System.out.println(differenceInMinutes);
+
+        // check if more than specified X minutes in advance
+        if (differenceInMinutes >= minutes) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }

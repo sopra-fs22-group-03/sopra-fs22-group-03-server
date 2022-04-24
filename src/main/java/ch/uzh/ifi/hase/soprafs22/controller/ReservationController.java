@@ -81,6 +81,15 @@ public class ReservationController {
         return createdReservationDTO;
     }
 
+    @DeleteMapping("/reservations/{reservationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSingleReservation(@PathVariable(value = "reservationId") long reservationId) {
+
+        // delete reservation
+        int response = reservationService.deleteSingleReservationByReservationId(reservationId);
+
+    }
+
     @PutMapping("/reservations/{reservationId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -100,6 +109,4 @@ public class ReservationController {
 
         return updatedReservationGetDTO;
     }
-
-    // TODO: PUT and DELETE mappings
 }
