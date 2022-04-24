@@ -32,9 +32,11 @@ public class Billing implements Serializable {
     private long userId;
 
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private PaymentStatus paymentStatus;
 
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private BookingType bookingType;
 
     @Column(nullable = false)

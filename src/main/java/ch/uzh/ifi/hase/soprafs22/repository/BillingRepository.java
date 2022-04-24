@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.repository;
 
+import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.entity.Billing;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,5 +12,7 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
     Billing findById(long billingId);
 
     List<Billing> findAllByUserId(long userId);
+
+    Billing findByBookingTypeAndBookingId(BookingType bookingType, long bookingId);
 
 }

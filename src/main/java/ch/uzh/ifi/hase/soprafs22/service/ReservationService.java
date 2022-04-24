@@ -1,9 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
-import ch.uzh.ifi.hase.soprafs22.entity.Billing;
-import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
-import ch.uzh.ifi.hase.soprafs22.entity.Reservation;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
+import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
+import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.ReservationRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
@@ -40,13 +39,16 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserService userService;
     private final CarparkService carparkService;
+    private final BillingRepository billingRepository;
+
 
     @Autowired
     public ReservationService(@Qualifier("reservationRepository") ReservationRepository reservationRepository, UserService userService,
-                              CarparkService carparkService) {
+                              CarparkService carparkService, BillingRepository billingRepository) {
         this.reservationRepository = reservationRepository;
         this.userService = userService;
         this.carparkService = carparkService;
+        this.billingRepository = billingRepository;
     }
 
     public List<Reservation> getAllReservationsByUserId(long userId) {
@@ -81,6 +83,9 @@ public class ReservationService {
         newReservation = reservationRepository.save(newReservation);
         reservationRepository.flush();
 
+        // create billing invoice for reservation
+        createBillingFromReservation(newReservation);
+
         return newReservation;
     }
 
@@ -103,10 +108,12 @@ public class ReservationService {
 
         // check if cancellation of reservation is more than 2 hours in advance
         boolean is2HoursInAdvance = isReservationCheckInXMinutesInAdvance(reservationToBeDeleted, 120);
-
         if (is2HoursInAdvance) {
-            // delete reservation
             try {
+                // delete billing associated with the reservation to be deleted
+                int response = deleteBillingFromReservation(reservationToBeDeleted);
+
+                // delete reservation
                 reservationRepository.deleteById(reservationId);
                 reservationRepository.flush();
                 return 0;
@@ -124,8 +131,15 @@ public class ReservationService {
     //    TODO (Implement checks if reservation requested by user is valid (minimum duration) and possible at specified carpark, time, date, ..)
     public Reservation updateReservation(Reservation reservationToBeUpdated, Reservation reservationUpdateRequest) {
 
+        // check if reservationToBeUpdated is more than 2 hours in advance; if not, then throw FORBIDDEN exception
+        boolean is2HoursInAdvance = isReservationCheckInXMinutesInAdvance(reservationToBeUpdated, 120);
 
-        // update fields which are provided by user (=not null)
+        if (!is2HoursInAdvance) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Reservation starts in less than 2 hours. Hence, changing the reservation is not possible anymore.");
+        }
+
+
+        // If reservationToBeUpdated is more than 2 hours in advance, then update fields which are provided by user (=not null)
         if (reservationUpdateRequest.getCheckinDate() != null) {
             reservationToBeUpdated.setCheckinDate(reservationUpdateRequest.getCheckinDate());
         }
@@ -207,6 +221,35 @@ public class ReservationService {
         }
         else {
             return false;
+        }
+    }
+
+    // create billing invoice for reservation
+    private void createBillingFromReservation(Reservation reservation) {
+        Billing billing = new Billing();
+        billing.setUserId(reservation.getUserId());
+        billing.setBookingType(BookingType.RESERVATION);
+        billing.setBookingId(reservation.getId());
+        billing.setPaymentStatus(PaymentStatus.OUTSTANDING);
+
+        billing = billingRepository.save(billing);
+        billingRepository.flush();
+
+    }
+
+    private int deleteBillingFromReservation(Reservation reservation) {
+        long reservationId = reservation.getId();
+        Billing billingOfToBeDeletedReservation = billingRepository.findByBookingTypeAndBookingId(BookingType.RESERVATION, reservationId);
+        long billingIdOfToBeDeletedReservation = billingOfToBeDeletedReservation.getId();
+
+        // delete billing associated with reservation
+        try {
+            billingRepository.deleteById(billingIdOfToBeDeletedReservation);
+            billingRepository.flush();
+            return 0;
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(500), "Deletion of billing associated with reservation failed.");
         }
     }
 

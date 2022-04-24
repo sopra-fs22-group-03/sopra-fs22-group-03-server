@@ -36,6 +36,7 @@ public class Notification implements Serializable {
     private long billingId;
 
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private SplitRequestStatus response;
 
     public long getId() {
