@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
+import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.Billing;
 import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
 import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
@@ -52,11 +53,14 @@ public class BillingService {
         return billingByBillingId;
     }
 
-//    TODO
     public Billing payBilling(Billing unpaidBilling) {
-        Billing paidBilling = new Billing();
+        // change payment status to "paid"
+        unpaidBilling.setPaymentStatus(PaymentStatus.PAID);
 
-        return paidBilling;
+        unpaidBilling = billingRepository.save(unpaidBilling);
+        billingRepository.flush();
+
+        return unpaidBilling;
     }
 
 //    TODO (send notification to splitting partner in this method?)
