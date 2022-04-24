@@ -191,7 +191,6 @@ public class CarparkService {
             ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
             ZonedDateTime now = ZonedDateTime.now(zurichZoneId);            // get current time in Zurich
             int numReservations = countReservationsInCarparkAtDateTime(carparkByLink, now);
-            System.out.println("NUM of Reservations: " + numReservations);
 
             int emptySpaces;
             try {

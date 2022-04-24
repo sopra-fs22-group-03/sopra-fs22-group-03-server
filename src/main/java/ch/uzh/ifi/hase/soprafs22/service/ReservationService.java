@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import static java.time.temporal.ChronoUnit.*;
 
@@ -72,8 +73,7 @@ public class ReservationService {
         // DO CHECKS IF RESERVATION IS VALID / EMPTY SPACES IN PARKING ETC.
         //...
 
-        // retrieve carpark of reservation
-        Carpark carparkOfReservation = carparkService.getSingleCarparkById(newReservation.getCarparkId());
+        checkIfReservationIsPossible(newReservation);
 
         // add licensePlate to newReservation
         User userOfReservation = userService.getSingleUserById(newReservation.getUserId());
@@ -254,9 +254,11 @@ public class ReservationService {
         }
     }
 
-    public int countReservationsInCarparkAtDateTime(Carpark carpark, ZonedDateTime zonedDateTime) {
-        // retrieve carparkId
-        long carparkId = carpark.getId();
+    public void checkIfReservationIsPossible(Reservation newReservation) {
+        // retrieve carparkId and maxCapacity of carpark
+        long carparkId = newReservation.getCarparkId();
+        Carpark carpark = carparkService.getSingleCarparkById(carparkId);
+        long maxCapacity = carpark.getMaxCapacity();
 
         // find all reservations for specified carpark
         List<Reservation> allReservationsInCarpark = reservationRepository.findAllByCarparkId(carparkId);
@@ -264,11 +266,17 @@ public class ReservationService {
         // define DateTimeFormatter
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-        // convert zonedDateTime to DateTime
-        LocalDateTime dateTime = zonedDateTime.toLocalDateTime();
+        // concatenate Date and Times
+        String newReservationCheckinDateTime = newReservation.getCheckinDate() + " " + newReservation.getCheckinTime();
+        String newReservationCheckoutDateTime = newReservation.getCheckoutDate() + " " + newReservation.getCheckoutTime();
+
+        // convert into DateTime Format
+        LocalDateTime newReservationStart = LocalDateTime.parse(newReservationCheckinDateTime, formatter);
+        LocalDateTime newReservationEnd = LocalDateTime.parse(newReservationCheckoutDateTime, formatter);
 
         // count all reservations whose checkinDateTime is before and checkoutDateTime is after the specified zonedDateTime
-        int counter = 0;
+        List<Reservation> refinedReservationList = new ArrayList<>();
+
         for (Reservation reservation : allReservationsInCarpark) {
             // concatenate Date and Times
             String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
@@ -279,17 +287,49 @@ public class ReservationService {
             LocalDateTime reservationEnd = LocalDateTime.parse(checkoutDateTime, formatter);
 
             // check if checkinDateTime is before and checkoutDateTime is after the specified zonedDateTime
-            boolean isBefore = reservationStart.isBefore(dateTime);
-            boolean isAfter = reservationEnd.isAfter(dateTime);
+            boolean newReservationStartIsBefore = newReservationStart.isBefore(reservationStart);
+            boolean newReservationEndIsBefore = newReservationEnd.isBefore(reservationStart);
+            boolean newReservationStartIsAfter = newReservationStart.isAfter(reservationEnd);
+            boolean newReservationEndIsAfter = newReservationEnd.isAfter(reservationEnd);
 
             // increment counter
-            if (isBefore && isAfter) {
-                counter++;
+            if ((newReservationStartIsBefore && newReservationEndIsBefore) || (newReservationStartIsAfter && newReservationEndIsAfter)) {
+                continue;
             }
+            refinedReservationList.add(reservation);
         }
 
-        return counter;
+        // go through refined reservation list and check each "1-minute-slice" of the newReservation period if the carpark is free
+        if (!refinedReservationList.isEmpty()) {
+            LocalDateTime iterator = newReservationStart;
+            while (iterator.isBefore(newReservationEnd)) {
 
+                int count = 0;
+                for (Reservation reservation : refinedReservationList) {
+                    // concatenate Date and Times
+                    String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+                    String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
+
+                    // convert into DateTime Format
+                    LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+                    LocalDateTime reservationEnd = LocalDateTime.parse(checkoutDateTime, formatter);
+
+                    // check if reservation lies in current "1-minute-slice" of newReservation
+                    boolean isBefore = reservationStart.isBefore(iterator);
+                    boolean isAfter = reservationEnd.isAfter(iterator);
+                    // increment counter if applicable
+                    if (isBefore && isAfter) {
+                        count++;
+                    }
+                }
+                long numOfEmptySpaces = maxCapacity - count;
+                if (numOfEmptySpaces <= 0) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Reservation not possible because carpark is fully booked at: " + iterator);
+                }
+                iterator = iterator.plusMinutes(1);
+            }
+        }
+        //return true;
     }
 
 }
