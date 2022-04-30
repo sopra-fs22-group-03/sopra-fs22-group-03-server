@@ -45,6 +45,13 @@ public class Billing implements Serializable {
     @Column(nullable = true)
     private long userIdOfSplitPartner;
 
+    public Billing() {
+
+    }
+
+    public Billing(long billingId, long userId, BookingType bookingType, PaymentStatus paymentStatus, long bookingId, long userIdOfSplitPartner) {
+    }
+
     public long getId() {
         return id;
     }
