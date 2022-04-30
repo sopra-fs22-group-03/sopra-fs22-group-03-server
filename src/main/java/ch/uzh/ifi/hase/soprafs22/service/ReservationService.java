@@ -181,7 +181,7 @@ public class ReservationService {
      *
      */
 
-    private float calculateParkingFeeOfReservation(Reservation reservation) {
+    public float calculateParkingFeeOfReservation(Reservation reservation) {
 
         // retrieve carpark of reservation
         Carpark carparkOfReservation = carparkService.getSingleCarparkById(reservation.getCarparkId());
@@ -203,7 +203,7 @@ public class ReservationService {
         return parkingFee;
     }
 
-    private boolean isReservationCheckInXMinutesInAdvance(Reservation reservation, long minutes) {
+    public boolean isReservationCheckInXMinutesInAdvance(Reservation reservation, long minutes) {
 
         // convert datetime string in correct format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
