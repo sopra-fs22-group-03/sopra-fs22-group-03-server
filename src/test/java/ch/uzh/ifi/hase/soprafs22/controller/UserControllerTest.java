@@ -320,70 +320,24 @@ public class UserControllerTest {
     }
 
     @Test
-    void deleteUser() {
+    void deleteUser() throws Exception {
+        long validUserId = user.getId();
+
+        // when the mock object (reservationService) is called for getSingleReservationByReservationId() method with any parameters,
+        // then it will return the object "reservation"
+        given(userService.deleteUser(validUserId)).willReturn(0);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder deleteRequest = delete("/users/{userId}/profile", validUserId);
+
+
+        mockMvc.perform(deleteRequest)
+                .andExpect(status().isNoContent())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
 
-/*
-  ////////////////// ENDPOINT 2 //////////////////
-  @Test
-  public void createUser_invalidInput_409thrown() throws Exception {
-      // given
-      String errorMessage = "The username provided already exists. Therefore, the user could not be created. Please pick a different username!";
-      ResponseStatusException conflictException = new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
-
-      UserPostDTO userPostDTO = new UserPostDTO();
-      userPostDTO.setPassword("password");
-      userPostDTO.setUsername("testUsername");
-
-      // when the mock object (userService) is called for createUser() method with any parameters,
-      // then it will return the object "conflictException"
-      given(userService.createUser(Mockito.any())).willThrow(conflictException);
-
-      // when/then -> do the request + validate the result
-      MockHttpServletRequestBuilder postRequest = post("/users")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(asJsonString(userPostDTO));
-
-      // then
-      mockMvc.perform(postRequest)
-              .andExpect(status().isConflict())
-              .andExpect(status().reason(is(errorMessage)));
-  }
-
-
-
-  ////////////////// ENDPOINT 6 //////////////////
-  @Test
-  public void updateUserProfile_invalidUserId_404thrown() throws Exception {
-      // given
-      // some random username update
-      UserPutDTO userPutDTO = new UserPutDTO();
-      userPutDTO.setUsername("someNewUsername");
-
-      // some random invalid userId
-      long invalidUserId = 99;
-      String baseErrorMessage = "The user with id %d was not found";
-      String errorMessage = String.format(baseErrorMessage, invalidUserId);
-
-      ResponseStatusException notFoundException = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
-
-      // when the mock object (userService) is called for getSingleUserById() method with an invalid userId,
-      // then it will return the object "notFoundException"
-      given(userService.getSingleUserById(invalidUserId)).willThrow(notFoundException);
-
-      // when/then -> do the request + validate the result
-      MockHttpServletRequestBuilder putRequest = put("/users/{userId}", invalidUserId)
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(asJsonString(userPutDTO));
-
-      // then
-      mockMvc.perform(putRequest)
-              .andExpect(status().isNotFound())
-              .andExpect(status().reason(is(errorMessage)));
-  }
-
-*//**
+/**
  * Helper Method to convert userPostDTO into a JSON string such that the input
  * can be processed
  * Input will look like this: {"password": "password", "username": "testUsername"}
