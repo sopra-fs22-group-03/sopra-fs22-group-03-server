@@ -52,32 +52,39 @@ public class BillingControllerTest {
   @MockBean
   private UserService userService;
 
-//  @Test
-//  public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
-//    // given
-//    User user = new User();
-//    user.setPassword("password");
-//    user.setUsername("firstname@lastname");
-////    user.setLogged_in(true);
-////    user.setCreationDate(LocalDate.now());
-//
-//    List<User> allUsers = Collections.singletonList(user);
-//
-//    // this mocks the UserService -> we define above what the userService should
-//    // return when getUsers() is called
-//    given(userService.getUsers()).willReturn(allUsers);
-//
-//    // when
-//    MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
-//
-//    // then
-//    mockMvc.perform(getRequest).andExpect(status().isOk())
-//        .andExpect(jsonPath("$", hasSize(1)))
-////        .andExpect(jsonPath("$[0].password", is(user.getPassword())))
-//        .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-////        .andExpect(jsonPath("$[0].logged_in", is(user.getLogged_in())))
-//        ;
-//  }
+
+
+  ////////////////// ENDPOINT 1 //////////////////
+  @Test
+  public void givenBillingsOfUser_whenGetAllBillings_thenReturnJsonArrayOfAllBillings() throws Exception {
+      // given
+      Billing billing = new Billing();
+      billing.setId(1L);
+      billing.setUserId(1L);
+      billing.setPaymentStatus(PaymentStatus.OUTSTANDING);
+      billing.setBookingType(BookingType.RESERVATION);
+      billing.setBookingId(1L);
+
+      // valid userId
+      long validUserId = billing.getUserId();
+
+      List<Billing> allBillingsOfUser = Collections.singletonList(billing);
+
+      // this mocks the BillingService
+      given(billingService.getAllBillingsByUserId(eq(validUserId))).willReturn(allBillingsOfUser);
+
+      // when
+      MockHttpServletRequestBuilder getRequest = get("/users/{userId}/billing", validUserId);
+
+      // then
+      mockMvc.perform(getRequest).andExpect(status().isOk())
+              .andExpect(jsonPath("$", hasSize(1)))
+              .andExpect(jsonPath("$[0].billingId", is(Math.toIntExact(billing.getId()))))
+              .andExpect(jsonPath("$[0].bookingType", is(billing.getBookingType().toString())))
+              .andExpect(jsonPath("$[0].bookingId", is(Math.toIntExact(billing.getBookingId()))))
+              .andExpect(jsonPath("$[0].paymentStatus", is(billing.getPaymentStatus().toString())))
+      ;
+  }
 
   ////////////////// ENDPOINT 2 //////////////////
   @Test
@@ -91,7 +98,7 @@ public class BillingControllerTest {
       billing.setBookingId(1L);
 
 
-      // valid userId
+      // valid billingId
       long validBillingId = billing.getId();
 
       // when the mock object (billingService) is called for getSingleBillingByBillingId() method with any parameters,
