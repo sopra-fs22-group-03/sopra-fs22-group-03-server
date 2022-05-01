@@ -261,71 +261,67 @@ public class UserControllerTest {
 
     }
 
-/*
-
     @Test
     void testUpdateUser() throws Exception {
         user.setIsLoggedIn(true);
 
-        long userId = user.getId();
+        long validUserId = user.getId();
+
+        User updatedUser = user;
+        updatedUser.setPassword("NEWpassword");
+        updatedUser.setUsername("NEWtestUsername");
+        updatedUser.setStreet("NEWMusterstrasse");
+        updatedUser.setStreetNo("1a");
+        updatedUser.setZipCode(8001L);
+        updatedUser.setCity("NEWZurich");
+        updatedUser.setEmail("NEWtes@test.ch");
+        updatedUser.setPhoneNumber("'0790000011'");
+        updatedUser.setLicensePlate("ZH11");
+        updatedUser.setCreditCardNumber(1111111111111100L);
+
 
         UserPutDTO userPutDTO = new UserPutDTO();
         userPutDTO.setPassword("NEWpassword");
         userPutDTO.setUsername("NEWtestUsername");
         userPutDTO.setStreet("NEWMusterstrasse");
+        userPutDTO.setStreetNo("1a");
+        userPutDTO.setZipCode(8001L);
+        userPutDTO.setCity("NEWZurich");
         userPutDTO.setEmail("NEWtes@test.ch");
+        userPutDTO.setPhoneNumber("'0790000011'");
+        userPutDTO.setLicensePlate("ZH11");
+        userPutDTO.setCreditCardNumber(1111111111111100L);
 
         // when the mock object (userService) is called for createUser() method with any parameters,
         // then it will return the object "user"
-        given(userService.getSingleUserById(userId)).willReturn(user);
-        given(userService.updateUser(user, userPutDTO)).willReturn(user);
-
+        // when the mock object (userService) is called for getSingleUserById() method with any parameters,
+        // then it will return the object "notFoundException"
+        given(userService.updateUser(Mockito.any(), Mockito.any())).willReturn(updatedUser);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder putRequest = put("/users/{userId}/profile", userId)
+        MockHttpServletRequestBuilder putRequest = put("/users/{userId}/profile", validUserId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPutDTO));
 
         // then
-        //assertTrue(true);
         mockMvc.perform(putRequest)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId", is(Math.toIntExact(user.getId()))))
-                .andExpect(jsonPath("$.username", is(user.getUsername())))
-                .andExpect(jsonPath("$.street", is(user.getStreet())))
-                .andExpect(jsonPath("$.streetNo", is(user.getStreetNo())))
-                //.andExpect(jsonPath("$.zipCode", is(user.getZipCode())))
-                .andExpect(jsonPath("$.city", is(user.getCity())))
-                .andExpect(jsonPath("$.phoneNumber", is(user.getPhoneNumber())))
-                .andExpect(jsonPath("$.email", is(user.getEmail())))
-                .andExpect(jsonPath("$.creditCardNumber", is(user.getCreditCardNumber())))
-        ;
-    }*/
-/*@Test
-public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
-  // given
-  User user = new User();
-  user.setPassword("password");
-  user.setUsername("firstname@lastname");
+                .andExpect(jsonPath("$.userId", is(Math.toIntExact(updatedUser.getId()))))
+                .andExpect(jsonPath("$.username", is(updatedUser.getUsername())))
+                .andExpect(jsonPath("$.street", is(updatedUser.getStreet())))
+                .andExpect(jsonPath("$.streetNo", is(updatedUser.getStreetNo())))
+                //.andExpect(jsonPath("$.zipCode", is(updatedUser.getZipCode())))
+                .andExpect(jsonPath("$.city", is(updatedUser.getCity())))
+                .andExpect(jsonPath("$.phoneNumber", is(updatedUser.getPhoneNumber())))
+                .andExpect(jsonPath("$.email", is(updatedUser.getEmail())))
+                .andExpect(jsonPath("$.creditCardNumber", is(updatedUser.getCreditCardNumber())))
+                .andExpect(jsonPath("$.isLoggedIn", is(updatedUser.getIsLoggedIn())));
 
+    }
 
-  List<User> allUsers = Collections.singletonList(user);
-
-  // this mocks the UserService -> we define above what the userService should
-  // return when getUsers() is called
-  given(userService.getUsers()).willReturn(allUsers);
-
-  // when
-  MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
-
-  // then
-  mockMvc.perform(getRequest).andExpect(status().isOk())
-      .andExpect(jsonPath("$", hasSize(1)))
-      .andExpect(jsonPath("$[0].password", is(user.getPassword())))
-      .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-      .andExpect(jsonPath("$[0].logged_in", is(user.getLogged_in())))
-      ;
-}*/
+    @Test
+    void deleteUser() {
+    }
 
 
 /*
@@ -355,96 +351,7 @@ public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
               .andExpect(status().reason(is(errorMessage)));
   }
 
-  ////////////////// ENDPOINT 3 //////////////////
-  @Test
-  public void getUserProfile_validInput_userRetrieved() throws Exception {
-      // given
-      User user = new User();
-      user.setUserId(1L);
-      user.setPassword("password");
-      user.setUsername("testUsername");
-      user.setToken("1");
-      user.setLogged_in(true);
-      user.setCreationDate(LocalDate.now());
-      user.setBirthday(LocalDate.of(1999,12,31));
 
-      // valid userId
-      long validUserId = user.getUserId();
-
-      // when the mock object (userService) is called for getSingleUserById() method with any parameters,
-      // then it will return the object "user"
-      given(userService.getSingleUserById(validUserId)).willReturn(user);
-
-      // when/then -> do the request + validate the result
-      MockHttpServletRequestBuilder getRequest = get("/users/{userId}", validUserId);
-
-      // then
-      mockMvc.perform(getRequest)
-              .andExpect(status().isOk())
-              .andExpect(jsonPath("$.id", is(Math.toIntExact(user.getUserId()))))
-              .andExpect(jsonPath("$.username", is(user.getUsername())))
-              .andExpect(jsonPath("$.logged_in", is(user.getLogged_in())))
-              .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
-              .andExpect(jsonPath("$.birthday", is(user.getBirthday().toString())))
-      ;
-  }
-
-  ////////////////// ENDPOINT 4 //////////////////
-  @Test
-  public void getUserProfile_invalidUserId_404thrown() throws Exception {
-      // given
-      long invalidUserId = 99; //some random invalid userId
-      String baseErrorMessage = "The user with id %d was not found";
-      String errorMessage = String.format(baseErrorMessage, invalidUserId);
-
-      ResponseStatusException notFoundException = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
-
-      // when the mock object (userService) is called for getSingleUserById() method with an invalid userId,
-      // then it will return the object "notFoundException"
-      given(userService.getSingleUserById(invalidUserId)).willThrow(notFoundException);
-
-      // when/then -> do the request + validate the result
-      MockHttpServletRequestBuilder getRequest = get("/users/{userId}", invalidUserId);
-
-      // then
-      mockMvc.perform(getRequest)
-              .andExpect(status().isNotFound())
-              .andExpect(status().reason(is(errorMessage)));
-  }
-
-  ////////////////// ENDPOINT 5 //////////////////
-  @Test
-  public void updateUserProfile_validUserId_userUpdated() throws Exception {
-      // given
-      User updatedUser = new User();
-      updatedUser.setUserId(1L);
-      updatedUser.setPassword("password");
-      updatedUser.setUsername("someNewUsername");
-      updatedUser.setToken("1");
-      updatedUser.setLogged_in(true);
-      updatedUser.setCreationDate(LocalDate.now());
-
-      // some random username update
-      UserPutDTO userPutDTO = new UserPutDTO();
-      userPutDTO.setUsername("someNewUsername");
-
-      // valid userId
-      long validUserId = updatedUser.getUserId();
-
-      // when the mock object (userService) is called for getSingleUserById() method with any parameters,
-      // then it will return the object "notFoundException"
-      given(userService.updateUser(Mockito.any(), Mockito.any())).willReturn(updatedUser);
-
-      // when/then -> do the request + validate the result
-      MockHttpServletRequestBuilder putRequest = put("/users/{userId}", validUserId)
-              .contentType(MediaType.APPLICATION_JSON)
-              .content(asJsonString(userPutDTO));
-
-      // then
-      mockMvc.perform(putRequest)
-              .andExpect(status().isNoContent())
-              .andExpect(jsonPath("$").doesNotExist());
-  }
 
   ////////////////// ENDPOINT 6 //////////////////
   @Test
@@ -502,9 +409,7 @@ private String asJsonString(final Object object) {
 
 
 
-    @Test
-    void deleteUser() {
-    }
+
 
 
 }
