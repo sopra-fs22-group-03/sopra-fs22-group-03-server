@@ -120,8 +120,8 @@ class ReservationControllerTest {
     }
 
     @Test
-    void testCreateReservation() throws Exception {
-
+    public void testCreateReservation() throws Exception {
+        // create PostDTO
         ReservationPostDTO reservationPostDTO = new ReservationPostDTO();
         reservationPostDTO.setUserId(1L);
         reservationPostDTO.setCarparkId(100001L);
@@ -130,18 +130,16 @@ class ReservationControllerTest {
         reservationPostDTO.setCheckoutDate("09.05.2032");
         reservationPostDTO.setCheckoutTime("08:00");
 
-
         // when the mock object (reservationService) is called for createReservation() method with any parameters,
         // then it will return the object "reservation"
         given(reservationService.createReservation(Mockito.any())).willReturn(reservation);
 
-        // when/then -> do the request + validate the result
+        // do the Post request with the specified PostDTO
         MockHttpServletRequestBuilder postRequest = post("/reservations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(reservationPostDTO));
 
         // then
-        //assertTrue(true);
         mockMvc.perform(postRequest)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.reservationId", is(Math.toIntExact(reservation.getId()))))

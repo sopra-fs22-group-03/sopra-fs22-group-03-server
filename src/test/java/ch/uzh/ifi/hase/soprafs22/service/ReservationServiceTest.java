@@ -33,37 +33,14 @@ public class ReservationServiceTest {
 
     @BeforeEach
     public void setup() {
-        // setup mock variables
-        long userId = 1L;
-        long carparkId = 100001;
-        String carparkName = "TestCarpark";
-        long maxCapacity = 100L;
-        long numOfEmptySpaces = 99L;
-        String street = "Test street";
-        String streetNo = "14";
-        long zipCode = 8000L;
-        String city = "Zurich";
-        double longitude = 8.5391825;
-        double latitude = 47.3686498;
-        boolean isOpen = true;
-        String weekdayOpenFrom = "01:00";
-        String weekdayOpenTo = "23:00";
-        String weekendOpenFrom = "06:00";
-        String weekendOpenTo = "20:00";
-        long hourlyTariff = 3L;
-
-        // setup mock objects
+        // given
         testReservation = new Reservation();
-        testReservation.setUserId(userId);
-        testReservation.setCarparkId(carparkId);
+        testReservation.setUserId(1L);
+        testReservation.setCarparkId(100001L);
         testReservation.setCheckinDate("08.05.2022");
         testReservation.setCheckinTime("08:00");
         testReservation.setCheckoutDate("08.05.2022");
         testReservation.setCheckoutTime("18:00");
-
-//        reservationUpdateRequest = new Reservation();
-//        reservationUpdateRequest.setCheckinTime("10:00");
-
     }
 
     @Test

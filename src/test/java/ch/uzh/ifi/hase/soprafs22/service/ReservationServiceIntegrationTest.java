@@ -44,7 +44,7 @@ public class ReservationServiceIntegrationTest {
 
   @Test
   public void createReservation_validInputs_success() {
-      // given
+      // given: new user
       user = new User();
       user.setPassword("password");
       user.setUsername("testUsername");
@@ -63,8 +63,10 @@ public class ReservationServiceIntegrationTest {
       user = userRepository.save(user);
       userRepository.flush();
 
+      // new user does not have any reservations
       assertTrue(reservationRepository.findAllByUserId(user.getId()).isEmpty());
 
+      // given: new reservation request
       Reservation testReservation = new Reservation();
       testReservation.setUserId(user.getId());
       testReservation.setCarparkId(100000L);
@@ -73,10 +75,10 @@ public class ReservationServiceIntegrationTest {
       testReservation.setCheckoutDate("20.05.2022");
       testReservation.setCheckoutTime("18:00");
 
-      // when
+      // when: create new reservation
       Reservation createdReservation = reservationService.createReservation(testReservation);
 
-      // then
+      // then: created reservation should match the reservation request specified by user
       assertEquals(testReservation.getUserId(), createdReservation.getUserId());
       assertEquals(testReservation.getCarparkId(), createdReservation.getCarparkId());
       assertEquals(testReservation.getCheckinDate(), createdReservation.getCheckinDate());
