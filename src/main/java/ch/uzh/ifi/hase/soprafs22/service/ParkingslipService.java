@@ -23,7 +23,6 @@ public class ParkingslipService {
 
     private final ParkingslipRepository parkingslipRepository;
 
-
     @Autowired
     public ParkingslipService(ParkingslipRepository parkingslipRepository) {
         this.parkingslipRepository = parkingslipRepository;
