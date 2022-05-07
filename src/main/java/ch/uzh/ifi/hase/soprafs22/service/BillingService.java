@@ -65,9 +65,19 @@ public class BillingService {
 
 //    TODO (send notification to splitting partner in this method?)
     public Billing splitBillingWithRequestedUser(User requestedUser, Billing billingBeforeSplit) {
-        Billing billingAfterSplit = new Billing();
 
-        return billingAfterSplit;
+        // get userId of user the bill is split with
+        long requestedUserId = requestedUser.getId();
+
+        // update billing
+        billingBeforeSplit.setUserIdOfSplitPartner(requestedUserId);
+        billingBeforeSplit.setPaymentStatus(PaymentStatus.SPLIT_REQUESTED);
+
+        // save billing
+        Billing billingAfterSplitRequest = billingRepository.save(billingBeforeSplit);
+        billingRepository.flush();
+
+        return billingAfterSplitRequest;
     }
 
 }

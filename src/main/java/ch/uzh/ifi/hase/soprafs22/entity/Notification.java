@@ -36,8 +36,7 @@ public class Notification implements Serializable {
     private long billingId;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private SplitRequestStatus response;
+    private String splitRequestStatus;
 
     public long getId() {
         return id;
@@ -71,12 +70,11 @@ public class Notification implements Serializable {
         this.billingId = billingId;
     }
 
-    public SplitRequestStatus getResponse() {
-        return response;
+    public String getSplitRequestStatus() {
+        return splitRequestStatus;
     }
 
-    public void setResponse(SplitRequestStatus response) {
-        this.response = response;
+    public void setSplitRequestStatus(String splitRequestStatus) {
+        this.splitRequestStatus = splitRequestStatus;
     }
-
 }

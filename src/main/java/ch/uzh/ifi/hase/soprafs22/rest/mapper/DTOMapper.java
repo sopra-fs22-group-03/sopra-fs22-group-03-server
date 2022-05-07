@@ -89,7 +89,7 @@ public interface DTOMapper {
     @Mapping(source = "requesterId", target = "requesterId")
     @Mapping(source = "requestedId", target = "requestedId")
     @Mapping(source = "billingId", target = "billingId")
-    @Mapping(source = "response", target = "response")
+    @Mapping(source = "splitRequestStatus", target = "splitRequestStatus")
     NotificationGetDTO convertEntityToNotificationGetDTO(Notification notification);
 
 

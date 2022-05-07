@@ -6,7 +6,7 @@ public class NotificationGetDTO {
     private long requesterId;
     private long requestedId;
     private long billingId;
-    private String response;
+    private String splitRequestStatus;
 
     public long getNotificationId() {
         return notificationId;
@@ -40,11 +40,11 @@ public class NotificationGetDTO {
         this.billingId = billingId;
     }
 
-    public String getResponse() {
-        return response;
+    public String getSplitRequestStatus() {
+        return splitRequestStatus;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setSplitRequestStatus(String splitRequestStatus) {
+        this.splitRequestStatus = splitRequestStatus;
     }
 }

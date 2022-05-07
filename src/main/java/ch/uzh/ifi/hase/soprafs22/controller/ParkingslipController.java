@@ -4,7 +4,6 @@ import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.ParkingslipGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.ParkingslipService;
-import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class ParkingslipController {
 
     private final ParkingslipService parkingslipService;
-    private final UserService userService;
 
-    ParkingslipController(ParkingslipService parkingslipService, UserService userService) {
+    ParkingslipController(ParkingslipService parkingslipService) {
         this.parkingslipService = parkingslipService;
-        this.userService = userService;
     }
 
     @GetMapping("/parkingslips/{parkingslipId}")

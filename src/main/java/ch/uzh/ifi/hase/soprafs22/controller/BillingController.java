@@ -1,13 +1,11 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
-import ch.uzh.ifi.hase.soprafs22.entity.Billing;
-import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
-import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.BillingService;
 import ch.uzh.ifi.hase.soprafs22.service.CarparkService;
+import ch.uzh.ifi.hase.soprafs22.service.NotificationService;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +25,13 @@ public class BillingController {
 
     private final BillingService billingService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
-    BillingController(BillingService billingService, UserService userService) {
+    BillingController(BillingService billingService, UserService userService,
+                      NotificationService notificationService) {
         this.billingService = billingService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/users/{userId}/billing")
@@ -95,10 +96,13 @@ public class BillingController {
         Billing billingBeforeSplit = billingService.getSingleBillingByBillingId(billingId);
 
         // split the billing between owner of billing (=myself) and requestedUser
-        Billing billingAfterSplit = billingService.splitBillingWithRequestedUser(requestedUser, billingBeforeSplit);
+        Billing billingAfterSplitRequest = billingService.splitBillingWithRequestedUser(requestedUser, billingBeforeSplit);
 
         // convert internal representation to API representation
-        BillingGetDTO billingAfterSplitDTO = DTOMapper.INSTANCE.convertEntityToBillingGetDTO(billingAfterSplit);
+        BillingGetDTO billingAfterSplitDTO = DTOMapper.INSTANCE.convertEntityToBillingGetDTO(billingAfterSplitRequest);
+
+        // generate new notification to the user the bill is split with
+        Notification newNotification = notificationService.createNotificationFromBilling(billingAfterSplitRequest);
 
         return billingAfterSplitDTO;
     }

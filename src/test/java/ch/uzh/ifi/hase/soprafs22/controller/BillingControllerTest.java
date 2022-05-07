@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.UsernameDTO;
 import ch.uzh.ifi.hase.soprafs22.service.BillingService;
+import ch.uzh.ifi.hase.soprafs22.service.NotificationService;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +52,9 @@ public class BillingControllerTest {
 
   @MockBean
   private UserService userService;
+
+  @MockBean
+  private NotificationService notificationService;
 
 
 
