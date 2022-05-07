@@ -11,7 +11,6 @@ public class Feed {
     final String title;
     final String link;
     final String description;
-    // final String date;
 
     final List<FeedMessage> entries = new ArrayList<FeedMessage>();
 
@@ -19,7 +18,6 @@ public class Feed {
         this.title = title;
         this.link = link;
         this.description = description;
-        //  this.date = date;
     }
 
     public List<FeedMessage> getMessages() {

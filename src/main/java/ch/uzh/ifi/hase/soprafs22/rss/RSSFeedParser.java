@@ -72,7 +72,6 @@ public class RSSFeedParser {
                     if (event.asEndElement().getName().getLocalPart() == (ITEM)) {
                         FeedMessage message = new FeedMessage();
                         message.setDescription(description);
-                        //message.setGuid(guid);
                         message.setLink(link);
                         message.setTitle(title);
                         feed.getMessages().add(message);
