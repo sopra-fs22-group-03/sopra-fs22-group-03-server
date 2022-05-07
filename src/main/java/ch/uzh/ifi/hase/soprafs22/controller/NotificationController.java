@@ -1,14 +1,10 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Notification;
-import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
-import ch.uzh.ifi.hase.soprafs22.entity.Reservation;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.NotificationGetDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.ParkingslipGetDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.ReservationGetDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.NotificationResponseDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.NotificationService;
-import ch.uzh.ifi.hase.soprafs22.service.ParkingslipService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,5 +43,18 @@ public class NotificationController {
 
         // return list of all reservationGetDTO
         return notificationGetDTOS;
+    }
+
+    @PostMapping("/notifications/{notificationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void handleNotificationResponse(@RequestBody NotificationResponseDTO notificationResponseDTO, @PathVariable(value = "notificationId") long notificationId) {
+
+        // get notification object
+        Notification notification = notificationService.getSingleNotificationByNotificationId(notificationId);
+
+        // handle response
+        boolean requestIsAccepted = notificationResponseDTO.getRequestIsAccepted();
+        notificationService.handleResponse(notification, requestIsAccepted);
     }
 }
