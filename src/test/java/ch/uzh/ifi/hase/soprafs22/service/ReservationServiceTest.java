@@ -70,6 +70,20 @@ public class ReservationServiceTest {
         assertEquals(testReservation.getCheckoutTime(), receivedReservation.getCheckoutTime());
     }
 
+    @Test
+    public void getSingleReservationByReservationIdTest_throwHttpStatusException() {
+        long invalidReservationId = 0;
+
+        //try to get a parkingslip that does not exist; status error with code 404 should be thrown
+        try {
+            reservationService.getSingleReservationByReservationId(invalidReservationId);
+            Assertions.fail("BAD REQUEST exception should have been thrown!");
+        }
+        catch (ResponseStatusException ex) {
+            assertEquals(404, ex.getRawStatusCode());
+        }
+    }
+
 //    @Test
 //    public void updateExistingReservation_validInput_success() {
 //        // setup spy object
