@@ -192,6 +192,7 @@ public class CarparkService {
             ZonedDateTime now = ZonedDateTime.now(zurichZoneId);            // get current time in Zurich
             int numReservations = countReservationsInCarparkAtDateTime(carparkByLink, now);
 
+            // parse empty spaces from RSS-feed
             int emptySpaces;
             try {
                 emptySpaces = Integer.parseInt(emptySpacesString);
@@ -200,11 +201,15 @@ public class CarparkService {
                 emptySpaces = 0;
             }
 
-            if (status.equals("open")) {
+            // calculate available spaces
+            int availableSpaces = emptySpaces - numParkingslips - numReservations;
+
+            // if the carpark is closed or if the number of available spaces is smaller equal to 0,
+            // the number of available space is set to 0
+            if (status.equals("open") && availableSpaces > 0) {
                 carparkByLink.setOpen(true);
-                carparkByLink.setNumOfEmptySpaces(emptySpaces - numParkingslips - numReservations);
-            }
-            else {
+                carparkByLink.setNumOfEmptySpaces(availableSpaces);
+            } else {
                 carparkByLink.setOpen(false);
                 carparkByLink.setNumOfEmptySpaces(0);
             }
