@@ -1,6 +1,9 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
+import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
+import ch.uzh.ifi.hase.soprafs22.entity.Billing;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.repository.ParkingslipRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +32,15 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    private final BillingService billingService;
+    private final ParkingslipRepository parkingslipRepository;
 
     @Autowired
-    public UserService(@Qualifier("userRepository") UserRepository userRepository) {
+    public UserService(@Qualifier("userRepository") UserRepository userRepository, BillingService billingService,
+                       ParkingslipRepository parkingslipRepository) {
         this.userRepository = userRepository;
+        this.billingService = billingService;
+        this.parkingslipRepository = parkingslipRepository;
     }
 
     public List<User> getUsers() {
@@ -160,7 +168,6 @@ public class UserService {
 
         User userToBeDeleted = getSingleUserById(userId);
 
-        // TODO: CHECK HTTP STATUS CODE OF ERROR
         // check if user has no unpaid billings; otherwise, throw error
         if (!userHasPaidAllBillings(userToBeDeleted)) {
             String baseErrorMessage = "The user with username %s has unpaid billings. Deletion of user not possible." +
@@ -168,7 +175,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, userToBeDeleted.getUsername()));
         }
 
-        // TODO: CHECK HTTP STATUS CODE OF ERROR
         // check if user is not checked-in in a carpark; otherwise, throw error
         if (!userIsCheckedOutOfAllParkings(userToBeDeleted)) {
             String baseErrorMessage = "The user with username %s is still checked-in in a carpark. Deletion of user not possible." +
@@ -244,11 +250,30 @@ public class UserService {
 
     // TODO: Implement check that user has no outstanding bills
     private boolean userHasPaidAllBillings(User user) {
+        long userId = user.getId();
+        List<Billing> allBillings = billingService.getAllBillingsByUserId(userId);
+
+        // if user has billings, check for each if it is paid. If not, throw a FORBIDDEN exception
+        if (!allBillings.isEmpty()) {
+            for (Billing billing : allBillings) {
+                if (billing.getPaymentStatus() != PaymentStatus.PAID) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User deletion not possible. Please pay all your bills first.");
+                }
+            }
+        }
+
         return true;
     }
 
     // TODO: Implement check that user is currently not checked-in into a parking
     private boolean userIsCheckedOutOfAllParkings(User user) {
+        long userId = user.getId();
+
+        // if user is checked-in in a carpark, then user deletion is not possible and FORBIDDEN exception is thrown
+        if (parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(userId)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User deletion not possible. Please check-out of the carpark first.");
+        }
+
         return true;
     }
 
