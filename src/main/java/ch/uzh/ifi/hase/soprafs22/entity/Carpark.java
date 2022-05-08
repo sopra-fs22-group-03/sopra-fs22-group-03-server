@@ -211,5 +211,11 @@ public class Carpark implements Serializable{
         this.remarks = remarks;
     }
 
+    public String getLink() {
+        return link;
+    }
 
+    public void setLink(String link){
+        this.link = link;
+    }
 }

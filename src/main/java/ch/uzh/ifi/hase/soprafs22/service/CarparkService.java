@@ -176,6 +176,12 @@ public class CarparkService {
         // updates capacity in all carparks from RSS-feed
         for (FeedMessage item : feed.getMessages()) {
             Carpark carparkByLink = carparkRepository.findCarparkByLink(item.getLink());
+            // if carpark is not initialized in database, skip it.
+            // this means that the onboarding of the respective carpark was not done so far
+            if (carparkByLink == null){
+                continue;
+            }
+
             long carparkId = carparkByLink.getId();
 
             // the description contains the status (open/closed) and the number of empty parking lots
