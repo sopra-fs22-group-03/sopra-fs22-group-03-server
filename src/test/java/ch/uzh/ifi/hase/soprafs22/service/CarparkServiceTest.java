@@ -1,9 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
-import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
-import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
-import ch.uzh.ifi.hase.soprafs22.entity.User;
+import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.repository.*;
+import ch.uzh.ifi.hase.soprafs22.rss.FeedMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,12 +26,20 @@ class CarparkServiceTest {
     CarparkRepository carparkRepository;
     @Mock
     ParkingslipRepository parkingslipRepository;
+    @Mock
+    ReservationRepository reservationRepository;
+    @Mock
+    UserRepository userRepository;
         Carpark testCarpark;
     User testUser;
     Parkingslip testParkingslipCheckedin;
 
     @InjectMocks
     CarparkService carparkService;
+    @InjectMocks
+    UserService userService;
+    @InjectMocks
+    FeedMessage feedMessage;
 
     @BeforeEach
     void setUp() {
@@ -50,7 +61,7 @@ class CarparkServiceTest {
         testCarpark.setWeekendOpenTo("23:59");
         testCarpark.setHourlyTariff(5);
         testCarpark.setRemarks("NONE");
-        testCarpark.setLink("test.com");
+        testCarpark.setLink("https://www.pls-zh.ch/parkhaus/accu.jsp?pid=accu");
 
         testUser = new User();
         testUser.setId(1L);
@@ -84,6 +95,15 @@ class CarparkServiceTest {
 
     @Test
     void testGetCarparks() {
+        List<Carpark> allCarparks = Collections.singletonList(testCarpark);
+
+        // this mocks the BillingService
+        given(carparkService.getCarparks()).willReturn(allCarparks);
+
+        // get all carparks
+        List<Carpark> expected = carparkService.getCarparks();
+
+        assertEquals(expected, allCarparks);
     }
 
     @Test
@@ -109,43 +129,47 @@ class CarparkServiceTest {
         }
     }
 
-//    @Test
-//    void testPerformCheckinOfUser() {
-//        testCarpark.setNumOfEmptySpaces(100);
-//
-//
-//        // setup spy object
-//        CarparkService carparkServiceSpy = Mockito.spy(carparkService);
-//        given(carparkRepository.findById(Mockito.anyLong())).willReturn(testCarpark);
-//        Parkingslip parkingslipCheckin = carparkServiceSpy.performCheckinOfUser(testUser, testCarpark);
-//
-//        assertEquals(99, testCarpark.getNumOfEmptySpaces());
-//    }
+    /*@Test
+    void testPerformCheckinOfUser() {
+        testCarpark.setNumOfEmptySpaces(100);
+        List<Reservation> reservations = new ArrayList<>();
+
+        given(carparkRepository.findById(Mockito.anyLong())).willReturn(testCarpark);
+        given(carparkRepository.findCarparkByLink(Mockito.anyString())).willReturn(testCarpark);
+        given(reservationRepository.findAllByCarparkId(Mockito.anyLong())).willReturn(reservations);
+
+        given(carparkService.performCheckinOfUser(testUser, testCarpark)).willReturn(testParkingslipCheckedin);
+        Parkingslip expected = carparkService.performCheckinOfUser(testUser, testCarpark);
+
+        assertEquals(expected, testParkingslipCheckedin);
+    }*/
 
     //TODO
-//    @Test
-//    void testPerformCheckinOfUserInFullCarpark_throwHttpStatusException() {
-//        testCarpark.setNumOfEmptySpaces(0);
-//
-//
-//        try {
-//            carparkService.performCheckinOfUser(testUser, testCarpark);
-//            Assertions.fail("BAD REQUEST exception should have been thrown!");
-//        }
-//        catch (ResponseStatusException ex) {
-//            assertEquals(403, ex.getRawStatusCode());
-//        }
-//    }
+/*@Test
+    void testPerformCheckinOfUserInFullCarpark_throwHttpStatusException() {
+        testCarpark.setNumOfEmptySpaces(0);
+
+
+        try {
+            carparkService.performCheckinOfUser(testUser, testCarpark);
+            Assertions.fail("BAD REQUEST exception should have been thrown!");
+        }
+        catch (ResponseStatusException ex) {
+            assertEquals(403, ex.getRawStatusCode());
+        }
+    }*/
 
     //TODO
-//    @Test
-//    void testPerformCheckoutOfUser() {
-//        testCarpark.setNumOfEmptySpaces(100);
-//
-//        Parkingslip parkingslipCheckin = carparkService.performCheckoutOfUser(testUser, testCarpark);
-//
-//        assertEquals(101, testCarpark.getNumOfEmptySpaces());
-//    }
+     /*@Test
+    void testPerformCheckoutOfUser() {
+        testCarpark.setNumOfEmptySpaces(100);
+        testParkingslipCheckedin = carparkService.performCheckinOfUser(testUser, testCarpark);
+
+
+        Parkingslip parkingslipCheckin = carparkService.performCheckoutOfUser(user, testCarpark);
+
+        assertEquals(101, testCarpark.getNumOfEmptySpaces());
+    }*/
 
 
 
