@@ -215,6 +215,9 @@ public class CarparkService {
             if (status.equals("open") && availableSpaces > 0) {
                 carparkByLink.setOpen(true);
                 carparkByLink.setNumOfEmptySpaces(availableSpaces);
+            } else if(status.equals("open") && availableSpaces <= 0){
+                carparkByLink.setOpen(true);
+                carparkByLink.setNumOfEmptySpaces(0);
             } else {
                 carparkByLink.setOpen(false);
                 carparkByLink.setNumOfEmptySpaces(0);
@@ -235,7 +238,7 @@ public class CarparkService {
 
     }
 
-    public int countReservationsInCarparkAtDateTime(Carpark carpark, ZonedDateTime zonedDateTime) {
+    private int countReservationsInCarparkAtDateTime(Carpark carpark, ZonedDateTime zonedDateTime) {
         // retrieve carparkId
         long carparkId = carpark.getId();
 
