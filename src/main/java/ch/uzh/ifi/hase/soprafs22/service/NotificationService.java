@@ -2,7 +2,6 @@ package ch.uzh.ifi.hase.soprafs22.service;
 
 import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
-import ch.uzh.ifi.hase.soprafs22.constant.SplitRequestStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.Billing;
 import ch.uzh.ifi.hase.soprafs22.entity.Notification;
 import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
