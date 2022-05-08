@@ -248,7 +248,6 @@ public class UserService {
         }
     }
 
-    // TODO: Implement check that user has no outstanding bills
     private boolean userHasPaidAllBillings(User user) {
         long userId = user.getId();
         List<Billing> allBillings = billingService.getAllBillingsByUserId(userId);
@@ -265,7 +264,6 @@ public class UserService {
         return true;
     }
 
-    // TODO: Implement check that user is currently not checked-in into a parking
     private boolean userIsCheckedOutOfAllParkings(User user) {
         long userId = user.getId();
 

@@ -73,6 +73,10 @@ public class ReservationService {
         // DO CHECKS IF RESERVATION IS VALID / EMPTY SPACES IN PARKING ETC.
         //...
 
+        // check if minimum duration of reservations is fulfilled
+        checkIfReservationDurationAtLeastXMinutes(newReservation, 120);
+
+        // check if carpark has empty spaces during the entire reservation period
         checkIfReservationIsPossible(newReservation);
 
         // add licensePlate to newReservation
@@ -160,6 +164,9 @@ public class ReservationService {
             reservationToBeUpdated.setCheckoutTime(reservationUpdateRequest.getCheckoutTime());
         }
 
+        // check if minimum duration of updated reservations is fulfilled
+        checkIfReservationDurationAtLeastXMinutes(reservationToBeUpdated, 120);
+
         // check if new reservation is possible due to max Capacity already reached by other reservations in specified timeslot
         checkIfReservationIsPossible(reservationToBeUpdated);
 
@@ -201,6 +208,25 @@ public class ReservationService {
         float parkingFee = parkingDurationInMinutes*(hourlyParkingTariff/60);
 
         return parkingFee;
+    }
+
+    public void checkIfReservationDurationAtLeastXMinutes(Reservation reservation, long minutes) {
+
+        // convert datetime string in correct format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+        String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
+
+        // calculate reservation duration in minutes
+        LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+        LocalDateTime reservationEnd = LocalDateTime.parse(checkoutDateTime, formatter);
+        float parkingDurationInMinutes = MINUTES.between(reservationStart, reservationEnd);
+
+        if (parkingDurationInMinutes < minutes) {
+            String baseErrorMessage = "Reservation not possible. Reason: Reservation duration is less than minimum duration of %d minutes.";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, minutes));
+        }
+
     }
 
     public boolean isReservationCheckInXMinutesInAdvance(Reservation reservation, long minutes) {
