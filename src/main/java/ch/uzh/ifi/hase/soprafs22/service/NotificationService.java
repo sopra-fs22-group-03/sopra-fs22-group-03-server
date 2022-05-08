@@ -94,21 +94,25 @@ public class NotificationService {
         long billingId = notification.getBillingId();
         Billing billingOfRequestor = billingService.getSingleBillingByBillingId(billingId);
 
-        // handle response
+        // handle response if split is accepted
         if (requestIsAccepted) {
             // change status of notification
             notification.setSplitRequestStatus("accepted");
 
-            // change status of requestor bill and half the amount
+            // change status of requestor bill
             billingOfRequestor.setPaymentStatus(PaymentStatus.SPLIT_ACCEPTED);
+
+            // handle case reservation: half the amount and create new billing for requested user
             if (billingOfRequestor.getBookingType() == BookingType.RESERVATION) {
                 Reservation reservationOfRequestor = reservationService.getSingleReservationByReservationId(billingOfRequestor.getBookingId());
+
+                // half amount
                 float halfAmount = reservationOfRequestor.getParkingFee()/2;
                 reservationOfRequestor.setParkingFee(halfAmount);
                 reservationOfRequestor = reservationRepository.save(reservationOfRequestor);
                 reservationRepository.flush();
 
-                // create billing for requested user
+                // create new billing for requested user (which references the reservation via BookingId)
                 Billing billingOfRequested = new Billing();
                 billingOfRequested.setUserId(billingOfRequestor.getUserIdOfSplitPartner());
                 billingOfRequested.setBookingType(billingOfRequestor.getBookingType());
@@ -118,13 +122,40 @@ public class NotificationService {
                 billingOfRequested = billingRepository.save(billingOfRequested);
                 billingRepository.flush();
             }
+
+            // handle case parkingslip: half the amount and create new billing for requested user
             else if (billingOfRequestor.getBookingType() == BookingType.PARKINGSLIP) {
-                //TODO case: split accepted for parkingslip
+                Parkingslip parkingslipOfRequestor = parkingslipService.getSingleParkingslipByParkingslipId(billingOfRequestor.getBookingId());
+
+                // half amount
+                float halfAmount = parkingslipOfRequestor.getParkingFee()/2;
+                parkingslipOfRequestor.setParkingFee(halfAmount);
+                parkingslipOfRequestor = parkingslipRepository.save(parkingslipOfRequestor);
+                parkingslipRepository.flush();
+
+                // create new billing for requested user (which references the parkingslip via BookingId)
+                Billing billingOfRequested = new Billing();
+                billingOfRequested.setUserId(billingOfRequestor.getUserIdOfSplitPartner());
+                billingOfRequested.setBookingType(billingOfRequestor.getBookingType());
+                billingOfRequested.setBookingId(billingOfRequestor.getBookingId());
+                billingOfRequested.setPaymentStatus(PaymentStatus.OUTSTANDING);
+
+                billingOfRequested = billingRepository.save(billingOfRequested);
+                billingRepository.flush();
             }
         }
+
+        // handle response if split is declined
         else {
-            //TODO case split not accepted
+            // change status of notification
+            notification.setSplitRequestStatus("declined");
+
+            // change status of requestor bill back to outstanding
+            billingOfRequestor.setPaymentStatus(PaymentStatus.OUTSTANDING);
         }
 
+        // save changes to the requestor bill
+        billingOfRequestor = billingRepository.save(billingOfRequestor);
+        billingRepository.flush();
     }
 }
