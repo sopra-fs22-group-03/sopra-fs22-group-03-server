@@ -45,7 +45,7 @@ public class NotificationController {
         return notificationGetDTOS;
     }
 
-    @PostMapping("/notifications/{notificationId}")
+    @PostMapping("/notifications/{notificationId}/response")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void handleNotificationResponse(@RequestBody NotificationResponseDTO notificationResponseDTO, @PathVariable(value = "notificationId") long notificationId) {
