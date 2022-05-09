@@ -246,7 +246,7 @@ public class CarparkService {
         List<Reservation> allReservationsInCarpark = reservationRepository.findAllByCarparkId(carparkId);
 
         // define DateTimeFormatter
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         // convert zonedDateTime to DateTime
         LocalDateTime dateTime = zonedDateTime.toLocalDateTime();
