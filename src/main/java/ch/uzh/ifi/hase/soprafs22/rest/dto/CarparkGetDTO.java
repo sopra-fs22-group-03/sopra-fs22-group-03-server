@@ -18,6 +18,7 @@ public class CarparkGetDTO {
     private String weekendOpenTo;
     private long hourlyTariff;
     private String remarks;
+    private boolean isCheckedIn;
 
     public long getCarparkId() {
         return carparkId;
@@ -145,5 +146,12 @@ public class CarparkGetDTO {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public boolean getIsCheckedIn() {
+        return isCheckedIn;}
+
+    public void setIsCheckedIn(boolean isCheckedIn) {
+        this.isCheckedIn = isCheckedIn;
     }
 }

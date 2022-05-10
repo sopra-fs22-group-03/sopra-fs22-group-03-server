@@ -13,6 +13,7 @@ public interface ParkingslipRepository extends JpaRepository<Parkingslip, Long> 
     Parkingslip findParkingslipByUserId(long userId);
     Parkingslip findParkingslipByUserIdAndCheckoutDateIsNull(long userId);
     int countByCarparkId(long carParkId);
+    boolean existsParkingslipByUserIdAndCarparkIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(long userId, long carparkId);
     //void removeById(long parkingslipId);
 
 }
