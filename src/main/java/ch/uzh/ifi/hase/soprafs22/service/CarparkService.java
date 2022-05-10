@@ -81,11 +81,6 @@ public class CarparkService {
         return carparkById;
     }
 
-    public boolean isUserCheckedInCarpark(User user, Carpark carpark) {
-        boolean userIsCheckedInCarpark = parkingslipRepository.existsParkingslipByUserIdAndCarparkIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(user.getId(), carpark.getId());
-        return userIsCheckedInCarpark;
-    }
-
 
     public Parkingslip performCheckinOfUser(User user, Carpark carpark) {
         long userId = user.getId();
