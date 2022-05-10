@@ -194,7 +194,7 @@ public class ReservationService {
         Carpark carparkOfReservation = carparkService.getSingleCarparkById(reservation.getCarparkId());
 
         // convert datetime string in correct format
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
         String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
 
@@ -213,7 +213,7 @@ public class ReservationService {
     public void checkIfReservationDurationAtLeastXMinutes(Reservation reservation, long minutes) {
 
         // convert datetime string in correct format
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
         String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
 
@@ -232,7 +232,7 @@ public class ReservationService {
     public boolean isReservationCheckInXMinutesInAdvance(Reservation reservation, long minutes) {
 
         // convert datetime string in correct format
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
 
         // convert into LocalDateTime
@@ -293,7 +293,7 @@ public class ReservationService {
         List<Reservation> allReservationsInCarpark = reservationRepository.findAllByCarparkId(carparkId);
 
         // define DateTimeFormatter
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
         // concatenate Date and Times
         String newReservationCheckinDateTime = newReservation.getCheckinDate() + " " + newReservation.getCheckinTime();
