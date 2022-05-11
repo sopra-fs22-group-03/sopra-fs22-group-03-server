@@ -18,6 +18,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CarparkServiceTest {
@@ -26,6 +28,8 @@ class CarparkServiceTest {
     CarparkRepository carparkRepository;
     @Mock
     ParkingslipRepository parkingslipRepository;
+    @Mock
+    BillingRepository billingRepository;
     @Mock
     ReservationRepository reservationRepository;
     @Mock
@@ -61,7 +65,7 @@ class CarparkServiceTest {
         testCarpark.setWeekendOpenTo("23:59");
         testCarpark.setHourlyTariff(5);
         testCarpark.setRemarks("NONE");
-        testCarpark.setLink("https://www.pls-zh.ch/parkhaus/accu.jsp?pid=accu");
+        testCarpark.setLink("https://www.pls-zh.ch/parkhaus/test");
 
         testUser = new User();
         testUser.setId(1L);
@@ -83,14 +87,12 @@ class CarparkServiceTest {
         testParkingslipCheckedin.setId(1L);
         testParkingslipCheckedin.setUserId(1L);
         testParkingslipCheckedin.setCarparkId(100001L);
-        testParkingslipCheckedin.setCheckinDate("08.04.2022");
+        testParkingslipCheckedin.setCheckinDate("2022-04-08");
         testParkingslipCheckedin.setCheckinTime("08:00");
         testParkingslipCheckedin.setCheckoutDate(null);
         testParkingslipCheckedin.setCheckoutTime(null);
         testParkingslipCheckedin.setLicensePlate("ZH11");
         testParkingslipCheckedin.setParkingFee(0);
-
-
     }
 
     @Test
@@ -108,7 +110,7 @@ class CarparkServiceTest {
 
     @Test
     void testGetSingleCarparkById() {
-        Mockito.when(carparkRepository.findById(Mockito.anyLong())).thenReturn(testCarpark);
+        when(carparkRepository.findById(Mockito.anyLong())).thenReturn(testCarpark);
 
         Carpark returnedCarpark = carparkService.getSingleCarparkById(100101);
 
@@ -129,49 +131,59 @@ class CarparkServiceTest {
         }
     }
 
-    /*@Test
+    @Test
     void testPerformCheckinOfUser() {
         testCarpark.setNumOfEmptySpaces(100);
-        List<Reservation> reservations = new ArrayList<>();
 
         given(carparkRepository.findById(Mockito.anyLong())).willReturn(testCarpark);
         given(carparkRepository.findCarparkByLink(Mockito.anyString())).willReturn(testCarpark);
-        given(reservationRepository.findAllByCarparkId(Mockito.anyLong())).willReturn(reservations);
 
-        given(carparkService.performCheckinOfUser(testUser, testCarpark)).willReturn(testParkingslipCheckedin);
+        when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedin);
+
         Parkingslip expected = carparkService.performCheckinOfUser(testUser, testCarpark);
 
         assertEquals(expected, testParkingslipCheckedin);
-    }*/
+        //assertEquals(testCarpark.getNumOfEmptySpaces(), 99); // doesn't work as test gets the number of available parking spaces from the RSS-feed
+    }
 
-    //TODO
-/*@Test
+    @Test
     void testPerformCheckinOfUserInFullCarpark_throwHttpStatusException() {
         testCarpark.setNumOfEmptySpaces(0);
 
-
+        given(carparkRepository.findById(Mockito.anyLong())).willReturn(testCarpark);
         try {
-            carparkService.performCheckinOfUser(testUser, testCarpark);
+            Parkingslip expected = carparkService.performCheckinOfUser(testUser, testCarpark);
             Assertions.fail("BAD REQUEST exception should have been thrown!");
         }
         catch (ResponseStatusException ex) {
             assertEquals(403, ex.getRawStatusCode());
         }
-    }*/
+    }
 
     //TODO
-     /*@Test
+     @Test
     void testPerformCheckoutOfUser() {
         testCarpark.setNumOfEmptySpaces(100);
-        testParkingslipCheckedin = carparkService.performCheckinOfUser(testUser, testCarpark);
+         testCarpark.setNumOfEmptySpaces(100);
 
+         given(carparkRepository.findById(Mockito.anyLong())).willReturn(testCarpark);
+         given(carparkRepository.findCarparkByLink(Mockito.anyString())).willReturn(testCarpark);
 
-        Parkingslip parkingslipCheckin = carparkService.performCheckoutOfUser(user, testCarpark);
+         // simulate check-in
+         when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedin);
+         Parkingslip parkingslipCheckedin = carparkService.performCheckinOfUser(testUser, testCarpark);
 
-        assertEquals(101, testCarpark.getNumOfEmptySpaces());
-    }*/
+         // simulate check-out
+         //when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedin);
+         when(parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(Mockito.anyLong())).thenReturn(true);
+         when(parkingslipRepository.findParkingslipByUserIdAndCheckoutDateIsNull(Mockito.anyLong())).thenReturn(parkingslipCheckedin);
 
+         Parkingslip parkingslipCheckedout = carparkService.performCheckoutOfUser(testUser, testCarpark);
 
+         assertEquals(parkingslipCheckedout.getId(), parkingslipCheckedin.getId());
+         assertNotNull(parkingslipCheckedout.getCheckoutDate());
+         assertNotNull(parkingslipCheckedout.getCheckoutTime());
+     }
 
     @Test
     void testPerformCheckoutOfUserNotCheckedin_throwHttpStatusException() {
