@@ -107,7 +107,7 @@ class CarparkServiceTest {
     }
 
     @Test
-    void testGetSingleCarparkById_() {
+    void testGetSingleCarparkById() {
         Mockito.when(carparkRepository.findById(Mockito.anyLong())).thenReturn(testCarpark);
 
         Carpark returnedCarpark = carparkService.getSingleCarparkById(100101);
