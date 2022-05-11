@@ -43,9 +43,9 @@ public class UserService {
         this.parkingslipRepository = parkingslipRepository;
     }
 
-    public List<User> getUsers() {
-        return this.userRepository.findAll();
-    }
+//    public List<User> getUsers() {
+//        return this.userRepository.findAll();
+//    }
 
     public User getSingleUserById(long id) {
         User userById = userRepository.findById(id);
