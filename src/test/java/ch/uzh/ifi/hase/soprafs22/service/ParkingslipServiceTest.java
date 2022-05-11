@@ -32,9 +32,9 @@ class ParkingslipServiceTest {
         parkingslip.setId(1L);
         parkingslip.setUserId(1L);
         parkingslip.setCarparkId(100001L);
-        parkingslip.setCheckinDate("08.05.2032");
+        parkingslip.setCheckinDate("2032-05-08");
         parkingslip.setCheckinTime("08:00");
-        parkingslip.setCheckoutDate("09.05.2032");
+        parkingslip.setCheckoutDate("2032-05-08");
         parkingslip.setCheckoutTime("08:00");
         parkingslip.setLicensePlate("ZH11");
         parkingslip.setParkingFee(48);

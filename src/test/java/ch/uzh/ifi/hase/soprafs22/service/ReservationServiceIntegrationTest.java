@@ -70,9 +70,9 @@ public class ReservationServiceIntegrationTest {
       Reservation testReservation = new Reservation();
       testReservation.setUserId(user.getId());
       testReservation.setCarparkId(100000L);
-      testReservation.setCheckinDate("20.05.2022");
+      testReservation.setCheckinDate("2022-05-20");
       testReservation.setCheckinTime("08:00");
-      testReservation.setCheckoutDate("20.05.2022");
+      testReservation.setCheckoutDate("2022-05-20");
       testReservation.setCheckoutTime("18:00");
 
       // when: create new reservation

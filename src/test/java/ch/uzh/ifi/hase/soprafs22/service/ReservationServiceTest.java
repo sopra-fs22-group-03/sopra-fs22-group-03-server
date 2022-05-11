@@ -37,9 +37,9 @@ public class ReservationServiceTest {
         testReservation = new Reservation();
         testReservation.setUserId(1L);
         testReservation.setCarparkId(100001L);
-        testReservation.setCheckinDate("08.05.2022");
+        testReservation.setCheckinDate("2022-05-08");
         testReservation.setCheckinTime("08:00");
-        testReservation.setCheckoutDate("08.05.2022");
+        testReservation.setCheckoutDate("2022-05-08");
         testReservation.setCheckoutTime("18:00");
     }
 
