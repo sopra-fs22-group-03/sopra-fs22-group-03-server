@@ -3,12 +3,16 @@ package ch.uzh.ifi.hase.soprafs22.service;
 import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.Billing;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.ArrayList;
@@ -17,6 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 class BillingServiceTest {
@@ -56,6 +61,19 @@ class BillingServiceTest {
         assertEquals(expected, billing);
     }
 
+    @Test
+    void testGetSingleBillingByBillingId_throwHttpStatusException() {
+        long invalidBillingId = 0;
+
+        //try to get a billing that does not exist; status error with code 404 should be thrown
+        try {
+            billingService.getSingleBillingByBillingId(0);
+            Assertions.fail("BAD REQUEST exception should have been thrown!");
+        }
+        catch (ResponseStatusException ex) {
+            assertEquals(404, ex.getRawStatusCode());
+        }
+    }
 
     @Test
     void testPayBilling() {
