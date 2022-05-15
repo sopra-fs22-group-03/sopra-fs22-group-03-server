@@ -73,6 +73,9 @@ public class ReservationService {
         // DO CHECKS IF RESERVATION IS VALID / EMPTY SPACES IN PARKING ETC.
         //...
 
+        // check if reservation end is after reservation start
+        checkIfReservationDatesAreValid(newReservation);
+
         // check if minimum duration of reservations is fulfilled
         checkIfReservationDurationAtLeastXMinutes(newReservation, 120);
 
@@ -164,6 +167,9 @@ public class ReservationService {
             reservationToBeUpdated.setCheckoutTime(reservationUpdateRequest.getCheckoutTime());
         }
 
+        // check if reservation end is after reservation start
+        checkIfReservationDatesAreValid(reservationToBeUpdated);
+
         // check if minimum duration of updated reservations is fulfilled
         checkIfReservationDurationAtLeastXMinutes(reservationToBeUpdated, 120);
 
@@ -225,6 +231,24 @@ public class ReservationService {
         if (parkingDurationInMinutes < minutes) {
             String baseErrorMessage = "Reservation not possible. Reason: Reservation duration is less than minimum duration of %d minutes.";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, minutes));
+        }
+
+    }
+
+    public void checkIfReservationDatesAreValid(Reservation reservation) {
+
+        // convert datetime string in correct format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+        String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
+
+        // calculate reservation duration in minutes
+        LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+        LocalDateTime reservationEnd = LocalDateTime.parse(checkoutDateTime, formatter);
+
+        if (reservationEnd.isBefore(reservationStart)) {
+            String baseErrorMessage = "Reservation not possible. Reason: Reservation end is before reservation start.";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
 
     }
