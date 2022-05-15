@@ -4,7 +4,6 @@ import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.BillingService;
-import ch.uzh.ifi.hase.soprafs22.service.CarparkService;
 import ch.uzh.ifi.hase.soprafs22.service.NotificationService;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -86,10 +85,10 @@ public class BillingController {
     @PostMapping("/billings/{billingId}/split")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public BillingGetDTO splitBillingByBillingIdWithRequestedUser(@RequestBody UsernameDTO usernameDTO, @PathVariable(value = "billingId") long billingId) {
+    public BillingGetDTO splitBillingByBillingIdWithRequestedUser(@RequestBody SplitRequestDTO splitRequestDTO, @PathVariable(value = "billingId") long billingId) {
 
         // get splitting partner from usernameDTO object
-        String username = usernameDTO.getUsername();
+        String username = splitRequestDTO.getUsername();
         User requestedUser = userService.getSingleUserByName(username);
 
         // get internal billling representation by provided path variable billingId

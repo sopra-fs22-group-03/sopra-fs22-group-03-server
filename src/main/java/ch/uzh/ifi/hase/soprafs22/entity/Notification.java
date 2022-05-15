@@ -37,6 +37,9 @@ public class Notification implements Serializable {
     @Column(nullable = false)
     private String splitRequestStatus;
 
+    @Column(nullable = true)
+    private String splitRequestMsg;
+
     public long getId() {
         return id;
     }
@@ -75,5 +78,13 @@ public class Notification implements Serializable {
 
     public void setSplitRequestStatus(String splitRequestStatus) {
         this.splitRequestStatus = splitRequestStatus;
+    }
+
+    public String getSplitRequestMsg() {
+        return splitRequestMsg;
+    }
+
+    public void setSplitRequestMsg(String splitRequestMsg) {
+        this.splitRequestMsg = splitRequestMsg;
     }
 }

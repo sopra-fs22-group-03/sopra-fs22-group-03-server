@@ -4,9 +4,7 @@ import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.Billing;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UserPutDTO;
-import ch.uzh.ifi.hase.soprafs22.rest.dto.UsernameDTO;
+import ch.uzh.ifi.hase.soprafs22.rest.dto.SplitRequestDTO;
 import ch.uzh.ifi.hase.soprafs22.service.BillingService;
 import ch.uzh.ifi.hase.soprafs22.service.NotificationService;
 import ch.uzh.ifi.hase.soprafs22.service.UserService;
@@ -23,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.*;
 import java.util.Collections;
 import java.util.List;
 import java.lang.Math;
@@ -182,8 +179,8 @@ public class BillingControllerTest {
         billingAfterSplitRequest.setBookingId(1L);
         billingAfterSplitRequest.setUserIdOfSplitPartner(2L);
 
-        UsernameDTO usernameDTO = new UsernameDTO();
-        usernameDTO.setUsername("User2");
+        SplitRequestDTO splitRequestDTO = new SplitRequestDTO();
+        splitRequestDTO.setUsername("User2");
 
         User requestedUser = new User();
 
@@ -194,13 +191,13 @@ public class BillingControllerTest {
 
         // mock objects
         given(billingService.getSingleBillingByBillingId(validBillingId)).willReturn(billingBeforeSplit);
-        given(userService.getSingleUserByName(eq(usernameDTO.getUsername()))).willReturn(requestedUser);
+        given(userService.getSingleUserByName(eq(splitRequestDTO.getUsername()))).willReturn(requestedUser);
         given(billingService.splitBillingWithRequestedUser(Mockito.any(User.class), eq(billingBeforeSplit))).willReturn(billingAfterSplitRequest);
 
         // when/then -> do the request + validate the result
         MockHttpServletRequestBuilder postRequest = post("/billings/{billingId}/split", validBillingId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(usernameDTO));
+                .content(asJsonString(splitRequestDTO));
 
         // then
         mockMvc.perform(postRequest)

@@ -1,10 +1,12 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Notification;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.NotificationGetDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.dto.NotificationResponseDTO;
 import ch.uzh.ifi.hase.soprafs22.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs22.service.NotificationService;
+import ch.uzh.ifi.hase.soprafs22.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +24,12 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final UserService userService;
 
-    NotificationController(NotificationService notificationService) {
+    NotificationController(NotificationService notificationService,
+                           UserService userService) {
         this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @GetMapping("/users/{userId}/notifications")
@@ -37,8 +42,18 @@ public class NotificationController {
         List<NotificationGetDTO> notificationGetDTOS = new ArrayList<>();
 
         // convert each reservation to the API representation
+        int index = 0;
         for (Notification notification : notificationsOfUser) {
+            // add converted notification
             notificationGetDTOS.add(DTOMapper.INSTANCE.convertEntityToNotificationGetDTO(notification));
+
+            // add username of requester to DTO
+            long requesterId = notificationGetDTOS.get(index).getRequesterId();
+            User requester = userService.getSingleUserById(requesterId);
+            notificationGetDTOS.get(index).setRequesterUsername(requester.getUsername());
+
+            // increment index
+            index++;
         }
 
         // return list of all reservationGetDTO

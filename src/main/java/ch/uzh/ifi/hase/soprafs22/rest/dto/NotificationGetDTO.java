@@ -7,6 +7,8 @@ public class NotificationGetDTO {
     private long requestedId;
     private long billingId;
     private String splitRequestStatus;
+    private String splitRequestMsg;
+    private String requesterUsername;
 
     public long getNotificationId() {
         return notificationId;
@@ -46,5 +48,21 @@ public class NotificationGetDTO {
 
     public void setSplitRequestStatus(String splitRequestStatus) {
         this.splitRequestStatus = splitRequestStatus;
+    }
+
+    public String getSplitRequestMsg() {
+        return splitRequestMsg;
+    }
+
+    public void setSplitRequestMsg(String splitRequestMsg) {
+        this.splitRequestMsg = splitRequestMsg;
+    }
+
+    public String getRequesterUsername() {
+        return requesterUsername;
+    }
+
+    public void setRequesterUsername(String requesterUsername) {
+        this.requesterUsername = requesterUsername;
     }
 }
