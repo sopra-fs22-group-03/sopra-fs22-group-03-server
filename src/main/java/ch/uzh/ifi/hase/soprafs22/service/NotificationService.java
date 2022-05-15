@@ -69,13 +69,21 @@ public class NotificationService {
     }
 
     // create notification from billing
-    public Notification createNotificationFromBilling(Billing billing) {
+    public Notification createNotificationFromBilling(Billing billing, String splitRequestMsg) {
 
         Notification notification = new Notification();
         notification.setBillingId(billing.getId());
         notification.setRequesterId(billing.getUserId());
         notification.setRequestedId(billing.getUserIdOfSplitPartner());
         notification.setSplitRequestStatus("pending");
+
+        // add split request message to notification
+        if (splitRequestMsg == null || splitRequestMsg.isBlank()) {
+            notification.setSplitRequestMsg(null);
+        }
+        else {
+            notification.setSplitRequestMsg(splitRequestMsg);
+        }
         notification = notificationRepository.save(notification);
         notificationRepository.flush();
 

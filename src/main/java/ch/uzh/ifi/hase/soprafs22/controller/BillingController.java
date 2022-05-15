@@ -100,8 +100,10 @@ public class BillingController {
         // convert internal representation to API representation
         BillingGetDTO billingAfterSplitRequestDTO = DTOMapper.INSTANCE.convertEntityToBillingGetDTO(billingAfterSplitRequest);
 
+        // extract split request message from DTO
+        String splitRequestMsg = splitRequestDTO.getSplitRequestMsg();
         // generate new notification to the user the bill is split with
-        Notification newNotification = notificationService.createNotificationFromBilling(billingAfterSplitRequest);
+        Notification newNotification = notificationService.createNotificationFromBilling(billingAfterSplitRequest, splitRequestMsg);
 
         return billingAfterSplitRequestDTO;
     }
