@@ -63,7 +63,6 @@ public class BillingService {
         return unpaidBilling;
     }
 
-//    TODO (send notification to splitting partner in this method?)
     public Billing splitBillingWithRequestedUser(User requestedUser, Billing billingBeforeSplit) {
 
         // get userId of user the bill is split with

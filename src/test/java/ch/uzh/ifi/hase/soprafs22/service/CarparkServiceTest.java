@@ -160,10 +160,8 @@ class CarparkServiceTest {
         }
     }
 
-    //TODO
      @Test
     void testPerformCheckoutOfUser() {
-        testCarpark.setNumOfEmptySpaces(100);
          testCarpark.setNumOfEmptySpaces(100);
 
          given(carparkRepository.findById(Mockito.anyLong())).willReturn(testCarpark);
