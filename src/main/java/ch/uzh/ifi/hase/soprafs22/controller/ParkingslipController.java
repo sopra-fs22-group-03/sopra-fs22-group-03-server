@@ -26,7 +26,7 @@ public class ParkingslipController {
     @GetMapping("/parkingslips/{parkingslipId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ParkingslipGetDTO getReservationInformation(@PathVariable(value = "parkingslipId") long parkingslipId) {
+    public ParkingslipGetDTO getParkingslipInformation(@PathVariable(value = "parkingslipId") long parkingslipId) {
 
         // get internal reservation representation by provided path variable reservationId
         Parkingslip parkingslipByParkingslipId = parkingslipService.getSingleParkingslipByParkingslipId(parkingslipId);

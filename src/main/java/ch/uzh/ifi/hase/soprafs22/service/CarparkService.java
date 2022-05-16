@@ -111,7 +111,7 @@ public class CarparkService {
         ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
         ZonedDateTime now = ZonedDateTime.now(zurichZoneId);
         parkingslipCheckin.setCheckinDate(LocalDate.from(now).toString());
-        parkingslipCheckin.setCheckinTime(LocalTime.from(now).toString());
+        parkingslipCheckin.setCheckinTime(LocalTime.from(now).truncatedTo(ChronoUnit.MINUTES).toString());
 //        parkingslipCheckin.setCheckinDate(LocalDate.now().toString());
 //        parkingslipCheckin.setCheckinTime(LocalTime.now().toString());
 
@@ -143,7 +143,7 @@ public class CarparkService {
         ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
         ZonedDateTime now = ZonedDateTime.now(zurichZoneId);
         parkingslipCheckout.setCheckoutDate(LocalDate.from(now).toString());
-        parkingslipCheckout.setCheckoutTime(LocalTime.from(now).toString());
+        parkingslipCheckout.setCheckoutTime(LocalTime.from(now).truncatedTo(ChronoUnit.MINUTES).plusMinutes(1).toString());
 //        parkingslipCheckout.setCheckoutDate(LocalDate.now().toString());
 //        parkingslipCheckout.setCheckoutTime(LocalTime.now().toString());
 
