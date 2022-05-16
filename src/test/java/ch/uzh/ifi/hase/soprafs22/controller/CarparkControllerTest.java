@@ -135,11 +135,14 @@ public class CarparkControllerTest {
       // valid carparkId
       long validCarparkId = carpark.getId();
 
+      // valid userID
+      long validUserId = 1;
+
       // mock the carparkService
       given(carparkService.getSingleCarparkById(validCarparkId)).willReturn(carpark);
 
       // when/then -> do the request + validate the result
-      MockHttpServletRequestBuilder getRequest = get("/carparks/{carparkId}", validCarparkId);
+      MockHttpServletRequestBuilder getRequest = get("/carparks/{carparkId}/{userId}", validCarparkId, validUserId);
 
       // then
       mockMvc.perform(getRequest)

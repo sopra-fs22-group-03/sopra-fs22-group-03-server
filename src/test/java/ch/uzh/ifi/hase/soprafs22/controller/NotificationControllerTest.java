@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs22.controller;
 
 import ch.uzh.ifi.hase.soprafs22.entity.Notification;
+import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,12 @@ class NotificationControllerTest {
     @MockBean
     private NotificationService notificationService;
 
+    @MockBean
+    private UserService userService;
+
     Notification notificationPending;
     Notification notificationDeclined;
+    User requesterUser;
 
 
     @BeforeEach
@@ -52,20 +57,29 @@ class NotificationControllerTest {
         notificationDeclined.setRequesterId(200002);
         notificationDeclined.setSplitRequestStatus("declined");
 
+        requesterUser = new User();
+        requesterUser.setId(200002);
+        requesterUser.setUsername("Requester");
+
+
     }
 
     @Test
     void getAllPendingNotificationsOfUser() throws Exception {
         // valid userId
-        long validUserId = notificationPending.getRequestedId();
+        long validRequestedId = notificationPending.getRequestedId();
+        long validRequesterId = notificationPending.getRequesterId();
 
         List<Notification> allPendingNotifications = Collections.singletonList(notificationPending);
 
         // this mocks the CarparkService
-        given(notificationService.getAllPendingNotificationsByUserId(validUserId)).willReturn(allPendingNotifications);
+        given(notificationService.getAllPendingNotificationsByUserId(validRequestedId)).willReturn(allPendingNotifications);
+
+        // this mocks the UserService
+        given(userService.getSingleUserById(validRequesterId)).willReturn(requesterUser);
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/users/{userId}/notifications", validUserId);
+        MockHttpServletRequestBuilder getRequest = get("/users/{userId}/notifications", validRequestedId);
 
         // then
         mockMvc.perform(getRequest).andExpect(status().isOk())
