@@ -46,10 +46,11 @@ public class CarparkController {
         return carparkGetDTOs;
     }
 
-    @GetMapping("/carparks/{carparkId}")
+    @GetMapping("/carparks/{carparkId}/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CarparkGetDTO getCarparkInformation(@RequestBody UserIdDTO userIdDTO, @PathVariable(value = "carparkId") long carparkId) {
+    public CarparkGetDTO getCarparkInformation(@PathVariable(value = "carparkId") long carparkId,
+                                               @PathVariable(value = "userId") long userId) {
 
         // get internal carpark representation by provided path variable carparkId
         Carpark carparkById = carparkService.getSingleCarparkById(carparkId);
@@ -58,7 +59,6 @@ public class CarparkController {
         CarparkGetDTO carparkGetDTO = DTOMapper.INSTANCE.convertEntityToCarparkGetDTO(carparkById);
 
         // get interal user representation from userIdDTO object
-        long userId = userIdDTO.getUserId();
         User userById = userService.getSingleUserById(userId);
 
         // add isCheckedIn status to the carpark DTO object for the user in request body
