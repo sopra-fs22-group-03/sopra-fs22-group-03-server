@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs22.service;
 import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.Billing;
+import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
 import org.junit.jupiter.api.Assertions;
@@ -20,8 +21,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BillingServiceTest {
@@ -83,5 +86,34 @@ class BillingServiceTest {
         billingService.payBilling(billing);
 
         assertEquals(billing.getPaymentStatus(), PaymentStatus.PAID);
+    }
+
+    @Test
+    void splitBillingWithRequestedUser() {
+        // given
+        Billing billingBeforeSplit = new Billing(500001, 200001, BookingType.PARKINGSLIP, PaymentStatus.OUTSTANDING, 300001, 0);
+
+        User requestedUser = new User();
+        requestedUser.setPassword("password");
+        requestedUser.setUsername("testUsername");
+        requestedUser.setStreet("Musterstrasse");
+        requestedUser.setStreetNo("1");
+        requestedUser.setZipCode(8000L);
+        requestedUser.setCity("Zurich");
+        requestedUser.setEmail("tes@test.ch");
+        requestedUser.setPhoneNumber("'0790000001'");
+        requestedUser.setLicensePlate("ZH1");
+        requestedUser.setCreditCardNumber(1111111111111111L);
+        requestedUser.setIsLoggedIn(true);
+        requestedUser.setIsManager(false);
+        requestedUser.setToken("'14527952-3ce3-465e-9674-b7ef35d02911'");
+        requestedUser.setId(200002L);
+        
+        // update billing
+        when(billingRepository.save(any(Billing.class))).thenReturn(billingBeforeSplit);
+        Billing billingAfterSplitRequest = billingService.splitBillingWithRequestedUser(requestedUser, billingBeforeSplit);
+
+        assertEquals(PaymentStatus.SPLIT_REQUESTED, billingAfterSplitRequest.getPaymentStatus());
+        assertEquals(200002L, billingAfterSplitRequest.getUserIdOfSplitPartner());
     }
 }
