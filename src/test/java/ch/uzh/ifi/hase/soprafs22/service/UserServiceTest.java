@@ -190,12 +190,11 @@ public class UserServiceTest {
         assertEquals(returnedUser.getIsLoggedIn(), true);
     }
 
-/*    // TODO (tests works, but I don't know why
     @Test
     void testLoginUser_throwHttpStatusException_404() {
         //try to get a user that does not exist; status error with code 404 should be thrown
         try {
-            // simulate that
+            // test fails as user cannot be found / is not mocked
             userService.loginUser(user);
             Assertions.fail("BAD REQUEST exception should have been thrown!");
         }
@@ -207,7 +206,7 @@ public class UserServiceTest {
     // TODO
     @Test
     void testLoginUser_throwHttpStatusException_403() {
-    }*/
+    }
 
     @Test
     void testLogoutUser() {
