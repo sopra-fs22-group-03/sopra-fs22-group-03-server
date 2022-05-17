@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -261,7 +260,7 @@ public class UserService {
         long userId = user.getId();
 
         // if user is checked-in in a carpark, then user deletion is not possible and FORBIDDEN exception is thrown
-        if (parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(userId)){
+        if (parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(userId)){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User deletion not possible. Please check-out of the carpark first.");
         }
 

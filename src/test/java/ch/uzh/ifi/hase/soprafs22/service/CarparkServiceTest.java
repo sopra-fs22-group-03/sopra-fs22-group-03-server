@@ -11,14 +11,12 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -173,7 +171,7 @@ class CarparkServiceTest {
 
          // simulate check-out
          //when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedin);
-         when(parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(Mockito.anyLong())).thenReturn(true);
+         when(parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(Mockito.anyLong())).thenReturn(true);
          when(parkingslipRepository.findParkingslipByUserIdAndCheckoutDateIsNull(Mockito.anyLong())).thenReturn(parkingslipCheckedin);
 
          Parkingslip parkingslipCheckedout = carparkService.performCheckoutOfUser(testUser, testCarpark);

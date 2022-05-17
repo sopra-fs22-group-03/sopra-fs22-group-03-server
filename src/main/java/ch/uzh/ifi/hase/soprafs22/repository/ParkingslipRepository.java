@@ -9,11 +9,11 @@ import java.util.List;
 @Repository("parkingslipRepository")
 public interface ParkingslipRepository extends JpaRepository<Parkingslip, Long> {
     Parkingslip findById(long id);
-    boolean existsParkingslipByUserIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(long userId);
+    boolean existsParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(long userId);
     Parkingslip findParkingslipByUserId(long userId);
     Parkingslip findParkingslipByUserIdAndCheckoutDateIsNull(long userId);
-    int countByCarparkId(long carParkId);
-    boolean existsParkingslipByUserIdAndCarparkIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(long userId, long carparkId);
+    int countByCarparkIdAndCheckoutDateIsNull(long carParkId);
+    boolean existsParkingslipByUserIdAndCarparkIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(long userId, long carparkId);
     //void removeById(long parkingslipId);
 
 }

@@ -82,7 +82,7 @@ public class CarparkService {
     }
 
     public boolean isUserCheckedInCarpark(User user, Carpark carpark) {
-        boolean userIsCheckedInCarpark = parkingslipRepository.existsParkingslipByUserIdAndCarparkIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(user.getId(), carpark.getId());
+        boolean userIsCheckedInCarpark = parkingslipRepository.existsParkingslipByUserIdAndCarparkIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(user.getId(), carpark.getId());
         return userIsCheckedInCarpark;
     }
 
@@ -91,7 +91,7 @@ public class CarparkService {
         long userId = user.getId();
 
         // throws 403 exception if user is already checked-in in a carpark
-        if (parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(userId)){
+        if (parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(userId)){
             String baseErrorMessage = "You are already checked-in in a car park. Please check-out before checking-in again.";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
@@ -132,7 +132,7 @@ public class CarparkService {
         long hourlyTariff = carpark.getHourlyTariff();
 
         // check if user is already checked-in
-        if (!parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndAndCheckoutDateIsNull(userId)){
+        if (!parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(userId)){
             String baseErrorMessage = "You cannot check-out because you are not checked-in in a car park.";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
@@ -196,7 +196,7 @@ public class CarparkService {
             String emptySpacesString = description.substring(description.indexOf("/") + 1, description.length()).trim();
 
             // get the number of checked-in cars for this carpark
-            int numParkingslips = parkingslipRepository.countByCarparkId(carparkId);
+            int numParkingslips = parkingslipRepository.countByCarparkIdAndCheckoutDateIsNull(carparkId);
 
             // get number of reservations for this carpark
             ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
