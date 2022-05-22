@@ -200,6 +200,4 @@ public class CarparkServiceIntegrationTest {
             assertEquals(403, ex.getRawStatusCode());
         }
     }
-
 }
-
