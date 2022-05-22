@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
+import ch.uzh.ifi.hase.soprafs22.entity.Billing;
 import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
+import ch.uzh.ifi.hase.soprafs22.entity.Parkingslip;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
 import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.ParkingslipRepository;
@@ -256,11 +258,12 @@ public class UserServiceTest {
 
     @Test
     void testDeleteUser_throwHttpStatusException_404() {
-        long validUserId = user.getId();
+        long invalidUserId = 0;
 
         //try to delete a user that does not exist/cannot be found; status error with code 404 should be thrown
+        //user is not mocked and, therefore, not found
         try {
-            userService.deleteUser(validUserId);
+            userService.deleteUser(invalidUserId);
             Assertions.fail("BAD REQUEST exception should have been thrown!");
         }
         catch (ResponseStatusException ex) {
