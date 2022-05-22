@@ -194,7 +194,7 @@ public class ReservationService {
      *
      */
 
-    public float calculateParkingFeeOfReservation(Reservation reservation) {
+    private float calculateParkingFeeOfReservation(Reservation reservation) {
 
         // retrieve carpark of reservation
         Carpark carparkOfReservation = carparkService.getSingleCarparkById(reservation.getCarparkId());
@@ -216,7 +216,7 @@ public class ReservationService {
         return parkingFee;
     }
 
-    public void checkIfReservationDurationAtLeastXMinutes(Reservation reservation, long minutes) {
+    private void checkIfReservationDurationAtLeastXMinutes(Reservation reservation, long minutes) {
 
         // convert datetime string in correct format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -235,7 +235,7 @@ public class ReservationService {
 
     }
 
-    public void checkIfReservationDatesAreValid(Reservation reservation) {
+    private void checkIfReservationDatesAreValid(Reservation reservation) {
 
         // convert datetime string in correct format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -253,7 +253,7 @@ public class ReservationService {
 
     }
 
-    public boolean isReservationCheckInXMinutesInAdvance(Reservation reservation, long minutes) {
+    private boolean isReservationCheckInXMinutesInAdvance(Reservation reservation, long minutes) {
 
         // convert datetime string in correct format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -307,7 +307,7 @@ public class ReservationService {
         }
     }
 
-    public void checkIfReservationIsPossible(Reservation newReservation) {
+    private void checkIfReservationIsPossible(Reservation newReservation) {
         // retrieve carparkId and maxCapacity of carpark
         long carparkId = newReservation.getCarparkId();
         Carpark carpark = carparkService.getSingleCarparkById(carparkId);

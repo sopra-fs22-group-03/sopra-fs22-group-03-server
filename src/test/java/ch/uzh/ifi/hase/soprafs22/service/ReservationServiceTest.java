@@ -13,8 +13,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class ReservationServiceTest {
@@ -44,21 +48,16 @@ public class ReservationServiceTest {
     }
 
     @Test
-    public void createNewReservation_carparkAlreadyFull_throwHttpStatusException() {
-        // setup spy object
-        ReservationService reservationService1 = Mockito.spy(reservationService);
+    void testGetAllReservationsByUserId() {
+        List<Reservation> allReservations = Collections.singletonList(testReservation);
 
-        // since carpark is already full, the helper method checkIfReservationIsPossible() should throw a FORBIDDEN exception
-        Mockito.doThrow(new ResponseStatusException(HttpStatus.FORBIDDEN)).when(reservationService1).checkIfReservationIsPossible(Mockito.any());
+        // this mocks the reservationService
+        given(reservationService.getAllReservationsByUserId(Mockito.anyLong())).willReturn(allReservations);
 
-        //try to create a new reservation but expect a status error with code 403 to be thrown
-        try {
-            reservationService1.createReservation(testReservation);
-            Assertions.fail("FORBIDDEN exception should have been thrown!");
-        }
-        catch (ResponseStatusException ex) {
-            assertEquals(403, ex.getRawStatusCode());
-        }
+        // get all reservations
+        List<Reservation> expected = reservationService.getAllReservationsByUserId(1L);
+
+        assertEquals(expected, allReservations);
     }
 
     @Test
