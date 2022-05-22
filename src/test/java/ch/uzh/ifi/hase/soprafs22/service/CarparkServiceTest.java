@@ -194,7 +194,4 @@ class CarparkServiceTest {
         }
     }
 
-    @Test
-    void countReservationsInCarparkAtDateTime() {
-    }
 }
