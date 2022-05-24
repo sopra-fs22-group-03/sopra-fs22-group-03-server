@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.ZonedDateTime;
@@ -72,6 +73,9 @@ public class ReservationService {
     public Reservation createReservation(Reservation newReservation) {
         // DO CHECKS IF RESERVATION IS VALID / EMPTY SPACES IN PARKING ETC.
         //...
+
+        // check if reservation is in the future
+        checkIfReservationIsInFuture(newReservation);
 
         // check if reservation end is after reservation start
         checkIfReservationDatesAreValid(newReservation);
@@ -167,6 +171,9 @@ public class ReservationService {
             reservationToBeUpdated.setCheckoutTime(reservationUpdateRequest.getCheckoutTime());
         }
 
+        // check if reservation is in the future
+        checkIfReservationIsInFuture(reservationToBeUpdated);
+
         // check if reservation end is after reservation start
         checkIfReservationDatesAreValid(reservationToBeUpdated);
 
@@ -248,6 +255,27 @@ public class ReservationService {
 
         if (reservationEnd.isBefore(reservationStart)) {
             String baseErrorMessage = "Reservation not possible. Reason: Reservation end is before reservation start.";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+        }
+
+    }
+
+    private void checkIfReservationIsInFuture(Reservation reservation) {
+
+        // convert datetime string in correct format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String checkinDateTime = reservation.getCheckinDate() + " " + reservation.getCheckinTime();
+        String checkoutDateTime = reservation.getCheckoutDate() + " " + reservation.getCheckoutTime();
+
+        // get reservation start
+        LocalDateTime reservationStart = LocalDateTime.parse(checkinDateTime, formatter);
+
+        // get current time in Zurich
+        ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
+        ZonedDateTime now = ZonedDateTime.now(zurichZoneId);
+
+        if (reservationStart.isBefore(ChronoLocalDateTime.from(now))) {
+            String baseErrorMessage = "Reservation not possible. Reason: Reservation start is in the past.";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
 
