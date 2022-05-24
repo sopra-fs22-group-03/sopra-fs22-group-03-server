@@ -101,10 +101,11 @@ public class UserService {
 
     public User logoutUser(User existingUser, Long id) {
         // check if user is already logged out
-        if (!existingUser.getIsLoggedIn()) {
-            String baseErrorMessage = "The user with id %d is already logged out";
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, id));
-        }
+//        if (!existingUser.getIsLoggedIn()) {
+//            String baseErrorMessage = "The user with id %d is already logged out";
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, id));
+//        }
+
         // logout user
         existingUser.setIsLoggedIn(false);
         existingUser = userRepository.save(existingUser);
