@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.CarparkRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.ParkingslipRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,9 +52,6 @@ public class UserServiceIntegrationTest {
 
   @BeforeEach
   public void setup() {
-    userRepository.deleteAll();
-    parkingslipRepository.deleteAll();
-
       // given
       assertNull(userRepository.findByUsername("testUsername"));
 
@@ -84,7 +82,13 @@ public class UserServiceIntegrationTest {
 
       }
 
-  private User user;
+    @AfterEach
+    void afterEach() {
+        userRepository.deleteAll();
+        parkingslipRepository.deleteAll();
+    }
+
+    private User user;
   private User userUpdated;
   private Carpark testCarpark;
   private Parkingslip testParkingslipCheckedin;

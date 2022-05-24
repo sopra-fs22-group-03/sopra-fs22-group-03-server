@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs22.repository.BillingRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.CarparkRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.ParkingslipRepository;
 import ch.uzh.ifi.hase.soprafs22.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,6 +74,13 @@ public class CarparkServiceIntegrationTest {
         user.setPhoneNumber("'0790000001'");
         user.setLicensePlate("ZH1");
         user.setCreditCardNumber(1111111111111111L);
+    }
+
+    @AfterEach
+    void afterEach() {
+        parkingslipRepository.deleteAll();
+        userRepository.deleteAll();
+        billingRepository.deleteAll();
     }
 
     @Test

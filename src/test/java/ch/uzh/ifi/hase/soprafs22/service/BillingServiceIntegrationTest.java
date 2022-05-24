@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
 import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
 import ch.uzh.ifi.hase.soprafs22.entity.*;
 import ch.uzh.ifi.hase.soprafs22.repository.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,10 +59,6 @@ public class BillingServiceIntegrationTest {
 
     @BeforeEach
     public void setup() {
-        userRepository.deleteAll();
-        billingRepository.deleteAll();
-        notificationRepository.deleteAll();
-
         // given
         user = new User();
         user.setPassword("password");
@@ -86,6 +83,13 @@ public class BillingServiceIntegrationTest {
         user_2.setPhoneNumber("'0790000001'");
         user_2.setLicensePlate("ZH1");
         user_2.setCreditCardNumber(1111111111111111L);
+    }
+
+    @AfterEach
+    void afterEach() {
+        notificationRepository.deleteAll();
+        userRepository.deleteAll();
+        billingRepository.deleteAll();
     }
 
     @Test

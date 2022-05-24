@@ -52,7 +52,7 @@ public class ReservationServiceIntegrationTest {
 
     @BeforeEach
     public void setup() {
-// given: new user
+        // given: new user
         user = new User();
         user.setPassword("password");
         user.setUsername("testUsername");
