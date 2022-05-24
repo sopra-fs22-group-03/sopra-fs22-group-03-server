@@ -67,6 +67,10 @@ public class BillingService {
 
         // get userId of user the bill is split with
         long requestedUserId = requestedUser.getId();
+        // throw error if the user wants to split the bill with itself
+        if (requestedUserId == billingBeforeSplit.getUserId()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Bill split not possible. Reason: Bill cannot be split with yourself.");
+        }
 
         // update billing
         billingBeforeSplit.setUserIdOfSplitPartner(requestedUserId);
