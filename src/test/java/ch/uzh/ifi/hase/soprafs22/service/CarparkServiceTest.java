@@ -35,6 +35,7 @@ class CarparkServiceTest {
         Carpark testCarpark;
     User testUser;
     Parkingslip testParkingslipCheckedin;
+    Parkingslip testParkingslipCheckedinSec;
 
     @InjectMocks
     CarparkService carparkService;
@@ -91,6 +92,17 @@ class CarparkServiceTest {
         testParkingslipCheckedin.setCheckoutTime(null);
         testParkingslipCheckedin.setLicensePlate("ZH11");
         testParkingslipCheckedin.setParkingFee(0);
+
+        testParkingslipCheckedinSec = new Parkingslip();
+        testParkingslipCheckedinSec.setId(2L);
+        testParkingslipCheckedinSec.setUserId(1L);
+        testParkingslipCheckedinSec.setCarparkId(100101L);
+        testParkingslipCheckedinSec.setCheckinDate("2022-04-08");
+        testParkingslipCheckedinSec.setCheckinTime("08:00");
+        testParkingslipCheckedinSec.setCheckoutDate(null);
+        testParkingslipCheckedinSec.setCheckoutTime(null);
+        testParkingslipCheckedinSec.setLicensePlate("ZH11");
+        testParkingslipCheckedinSec.setParkingFee(0);
     }
 
     @Test
@@ -166,11 +178,11 @@ class CarparkServiceTest {
          given(carparkRepository.findCarparkByLink(Mockito.anyString())).willReturn(testCarpark);
 
          // simulate check-in
-         when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedin);
+         when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedinSec);
          Parkingslip parkingslipCheckedin = carparkService.performCheckinOfUser(testUser, testCarpark);
 
          // simulate check-out
-         //when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedin);
+         //when(parkingslipRepository.save(any(Parkingslip.class))).thenReturn(testParkingslipCheckedinSec);
          when(parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(Mockito.anyLong())).thenReturn(true);
          when(parkingslipRepository.findParkingslipByUserIdAndCheckoutDateIsNull(Mockito.anyLong())).thenReturn(parkingslipCheckedin);
 
