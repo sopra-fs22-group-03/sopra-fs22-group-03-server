@@ -1,5 +1,8 @@
 package ch.uzh.ifi.hase.soprafs22.service;
 
+import ch.uzh.ifi.hase.soprafs22.constant.BookingType;
+import ch.uzh.ifi.hase.soprafs22.constant.PaymentStatus;
+import ch.uzh.ifi.hase.soprafs22.entity.Billing;
 import ch.uzh.ifi.hase.soprafs22.entity.Carpark;
 import ch.uzh.ifi.hase.soprafs22.entity.Reservation;
 import ch.uzh.ifi.hase.soprafs22.entity.User;
@@ -19,15 +22,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ReservationServiceTest {
 
     @Mock
     ReservationRepository reservationRepository;
+    @Mock
+    BillingRepository billingRepository;
     UserService userService;
     CarparkService carparkService;
-    BillingRepository billingRepository;
     Reservation testReservation;
     Reservation reservationUpdateRequest;
     Carpark testCarpark;
@@ -41,9 +47,9 @@ public class ReservationServiceTest {
         testReservation = new Reservation();
         testReservation.setUserId(1L);
         testReservation.setCarparkId(100001L);
-        testReservation.setCheckinDate("2022-05-08");
+        testReservation.setCheckinDate("2032-05-08");
         testReservation.setCheckinTime("08:00");
-        testReservation.setCheckoutDate("2022-05-08");
+        testReservation.setCheckoutDate("2032-05-08");
         testReservation.setCheckoutTime("18:00");
     }
 
@@ -83,6 +89,27 @@ public class ReservationServiceTest {
         }
     }
 
+    @Test
+    public void testDeleteSingleReservationByReservationId_throwHttpStatusException_403() {
+        testReservation.setCheckinDate("2000-01-01");
+        testReservation.setCheckinTime("08:00");
+        testReservation.setCheckoutDate("2000-01-01");
+        testReservation.setCheckoutTime("18:00");
+
+        Mockito.when(reservationRepository.findById(Mockito.anyLong())).thenReturn(testReservation).thenReturn(null);
+        Mockito.when(reservationService.getSingleReservationByReservationId(Mockito.anyLong())).thenReturn(testReservation);
+
+        Reservation reservationToBeDeleted = reservationService.getSingleReservationByReservationId(1);
+
+        try {
+            // then: try to delete the reservation. since reservation is in the past / less than two hours before. it will fail
+            reservationService.deleteSingleReservationByReservationId(1L);
+            Assertions.fail("BAD REQUEST exception should have been thrown!");
+        }
+        catch (ResponseStatusException ex) {
+            assertEquals(403, ex.getRawStatusCode());
+        }
+    }
 //    @Test
 //    public void updateExistingReservation_validInput_success() {
 //        // setup spy object
