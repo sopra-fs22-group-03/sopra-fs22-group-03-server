@@ -136,9 +136,15 @@ public class CarparkService {
             String baseErrorMessage = "You cannot check-out because you are not checked-in in a car park.";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
-        // check that user can only check out in the respective car park!
 
         Parkingslip parkingslipCheckout = parkingslipRepository.findParkingslipByUserIdAndCheckoutDateIsNull(userId);
+
+        // check that user can only check out in the respective car park!
+        String parkingslipCarparkName = getSingleCarparkById(parkingslipCheckout.getCarparkId()).getName();
+        if (parkingslipCheckout.getCarparkId() != carpark.getId()){
+            String baseErrorMessage = "You cannot check-out of the %s carpark because you are currently checked-in in the %s carpark!";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage, carpark.getName(), parkingslipCarparkName));
+        }
 
         ZoneId zurichZoneId = ZoneId.of("Europe/Zurich");
         ZonedDateTime now = ZonedDateTime.now(zurichZoneId);
