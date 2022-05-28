@@ -100,7 +100,7 @@ public class CarparkService {
         Carpark carparkToCheckIn = carparkRepository.findById(carparkId);
 
         if (carparkToCheckIn.getNumOfEmptySpaces() <= 0){
-            String baseErrorMessage = "Car park has no empty spaces. Please an other car park";
+            String baseErrorMessage = "Car park has no empty spaces. Please try another car park";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
 
