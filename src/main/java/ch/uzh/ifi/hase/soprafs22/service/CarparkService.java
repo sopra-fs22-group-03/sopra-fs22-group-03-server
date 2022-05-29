@@ -92,8 +92,13 @@ public class CarparkService {
 
         // throws 403 exception if user is already checked-in in a carpark
         if (parkingslipRepository.existsParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(userId)){
-            String baseErrorMessage = "You are already checked-in in a car park. Please check-out before checking-in again.";
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+            long checkedInCarparkId = parkingslipRepository.findParkingslipByUserIdAndCheckinDateIsNotNullAndCheckoutDateIsNull(userId).getCarparkId();
+            String checkedInCarparkName = getSingleCarparkById(checkedInCarparkId).getName();
+            String requestedCarparkName = carpark.getName();
+            String baseErrorMessage = "You cannot check-in in the %s carpark because you are currently already checked-in in the %s carpark. " +
+                    "Please checkout of the %s carpark before checking-in again.";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage,
+                    requestedCarparkName, checkedInCarparkName, checkedInCarparkName));
         }
 
         long carparkId = carpark.getId();
