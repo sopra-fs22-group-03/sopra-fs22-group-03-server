@@ -3,18 +3,23 @@
 
 ## Introduction
 
-Every car journey ends in a parking space. In urban areas such as Zürich, the search for a
-free parking space can be time consuming and cumbersome. The search for an empty parking
-space not only strains the nerves of motorists but also leads to increased traffic congestion and
-ecologically undesirable pollution. Our project tackles this problem by providing a web-based user
-interface that allows registered users to see in real-time which car parks have free parking spaces.
-Furthermore, registered users can reserve a parking space in advance at their car park of their choice.
+To date, there is no uniform system for reservation and digital check-in in parking garages in Zurich.
+We have all been to Zurich before and were looking for a parking space. On the one hand, it was unknown
+where exactly the next parking garage was, and on the other hand, it was often already full when you
+wanted to check in. In addition, the search for an empty parking space not only strains the nerves of motorists
+but also leads to increased traffic congestion and ecologically undesirable pollution.
+<br />
+
+Our application - called **MyPark** - tackles this problem by providing a web-based user interface that allows registered users to see
+in real-time which car parks have free parking spaces. These car parks can be explored either on an interactive map or
+in tabular form. MyPark not only allows users to check-in into a car park (and thereby avoiding queuing) but also
+to reserve a parking space in advance at the car park of their choice.
 <br />
 
 The necessary data for this project is provided by [Parkleitsystem Stadt Zürich (PLS)](https://www.pls-zh.ch/info.jsp) and can
 be accessed via an [RSS feed](https://www.pls-zh.ch/plsFeed/rss). PLS tracks the empty parking spaces in the city of Zurich and
-updates the number of empty parking spaces in real-time. In addition, we will use a OpenStreetMap API
-to map the different car parkings on a map. 
+updates the number of empty parking spaces in real-time. In addition, we use Leaflet (OpenStreetMap) API
+to show the car parkings on an interactive map. 
 
 ## Technologies
 
@@ -97,7 +102,7 @@ If you want to avoid running all tests with every change, use the following comm
 ### API Endpoint Testing
 
 Upon request, developers can be added to the existing [Postman](https://www.getpostman.com) workspace of this project. Therein, many API tests for
-the endpoints of this application are already written. Future developers can build upon these.
+the endpoints of this application are already written. Future developers can build upon these existing tests.
 
 
 ## Roadmap
