@@ -1,9 +1,20 @@
-# SoPra Group 03 FS22 - myPark
+# MyPark – A Parking Reservation System (SoPra Group 03 FS22)
 
 
 ## Introduction
 
-To be included: Project goal and motivation.
+Every car journey ends in a parking space. In urban areas such as Zürich, the search for a
+free parking space can be time consuming and cumbersome. The search for an empty parking
+space not only strains the nerves of motorists but also leads to increased traffic congestion and
+ecologically undesirable pollution. Our project tackles this problem by providing a web-based user
+interface that allows registered users to see in real-time which car parks have free parking spaces.
+Furthermore, registered users can reserve a parking space in advance at their car park of their choice.
+<br />
+
+The necessary data for this project is provided by [Parkleitsystem Stadt Zürich (PLS)](https://www.pls-zh.ch/info.jsp) and can
+be accessed via an [RSS feed](https://www.pls-zh.ch/plsFeed/rss). PLS tracks the empty parking spaces in the city of Zurich and
+updates the number of empty parking spaces in real-time. In addition, we will use a OpenStreetMap API
+to map the different car parkings on a map. 
 
 ## Technologies
 
