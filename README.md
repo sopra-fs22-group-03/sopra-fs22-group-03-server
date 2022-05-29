@@ -118,6 +118,10 @@ the endpoints of this application are already written. Future developers can bui
 -   [Kilian Sennrich](https://github.com/ksennr)
 -   [Richard Specker](https://github.com/rspecker)
 
+Supervised by:
+-   [Kyrill Hux](https://github.com/realChesta)
+
+
 ## License
 
 [Apache License, 2.0](./LICENSE)
